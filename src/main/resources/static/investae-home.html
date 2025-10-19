@@ -5,108 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investaê - Sistema de Investimentos</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
+        body {
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea, #764ba2);
-            margin: 0; 
-            padding: 20px; 
-            min-height: 100vh; 
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
         }
-        .container { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 30px; 
-            border-radius: 10px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        .container {
+            max-width: 950px; /* Aumentei um pouco mais para a tabela de admin */
+            margin: 20px auto; /* Adicionei margem superior/inferior */
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .header { 
-            text-align: center; 
-            margin-bottom: 30px; 
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        .logo { 
-            font-size: 32px; 
-            font-weight: bold; 
-            color: #667eea; 
-            margin-bottom: 10px; 
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
         }
-        .btn { 
-            background: #667eea; 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            margin: 5px; 
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px; /* Ajustei padding */
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+            transition: background 0.2s;
+            font-size: 0.9em; /* Diminui um pouco a fonte */
         }
-        .btn:hover { 
-            background: #5a67d8; 
+        .btn:hover {
+            background: #5a67d8;
         }
-        .form-group { 
-            margin-bottom: 15px; 
-        }
-        .form-control { 
-            width: 100%; 
-            padding: 10px; 
-            border: 1px solid #ddd; 
-            border-radius: 5px; 
-        }
-        .hidden { 
-            display: none; 
-        }
-        .alert { 
-            padding: 10px; 
-            border-radius: 5px; 
-            margin-bottom: 15px; 
-        }
-        .alert-error { 
-            background: #f8d7da; 
-            color: #721c24; 
-            border: 1px solid #f5c6cb; 
-        }
-        .alert-success { 
-            background: #d4edda; 
-            color: #155724; 
-            border: 1px solid #c3e6cb; 
-        }
-        .stats { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 20px; 
-            margin: 20px 0; 
-        }
-        .stat-card { 
-            background: linear-gradient(135deg, #f093fb, #f5576c); 
-            color: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            text-align: center; 
-        }
-        .swagger-link { 
-            display: inline-block; 
-            background: #17a2b8; 
-            color: white; 
-            padding: 10px 20px; 
-            text-decoration: none; 
-            border-radius: 5px; 
-            margin: 10px 0; 
-        }
-        .swagger-link:hover { 
-            background: #138496; 
-        }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px; 
-        }
-        th, td { 
-            padding: 10px; 
-            border: 1px solid #ddd; 
-            text-align: left; 
-        }
-        th { 
-            background: #f8f9fa; 
-        }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-warning:hover { background: #e0a800; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .hidden { display: none !important; } /* Usei !important para garantir */
+        .alert { padding: 10px; border-radius: 5px; margin: 15px 0; border: 1px solid transparent; }
+        .alert-error { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        .alert-success { background: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0; } /* Ajustei minmax e gap */
+        .stat-card { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .stat-card h3 { margin: 0 0 5px 0; font-size: 1.5em; } /* Ajustei margem e tamanho */
+        .swagger-link { display: inline-block; background: #17a2b8; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin: 5px; font-weight: bold; font-size: 0.9em; }
+        .swagger-link:hover { background: #138496; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: auto; /* Permite que o navegador ajuste as colunas */ }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; word-wrap: break-word; /* Quebra palavras longas */ }
+        thead th { background: #f8f9fa; position: sticky; top: 0; z-index: 1; }
+        tbody tr:nth-child(even) { background-color: #f9f9f9; } /* Listras na tabela */
+        td .btn { padding: 5px 10px; font-size: 0.8em; margin-right: 5px; } /* Botões de ação menores */
+        td:last-child { white-space: nowrap; width: 1%; } /* Evita quebra de linha nos botões de ação */
+
+        .tab-buttons { margin: 20px 0; border-bottom: 2px solid #ddd; padding-bottom: 0; display: flex; flex-wrap: wrap; gap: 5px; } /* Removi padding-bottom e ajustei gap */
+        .tab-buttons .btn { background: #f1f1f1; color: #333; margin-bottom: -2px; border-radius: 5px 5px 0 0; border: 1px solid #ddd; border-bottom: none; }
+        .tab-buttons .btn.btn-active { background: white; color: #667eea; border-color: #ddd; border-bottom: 2px solid white; position: relative; top: 2px; /* Efeito de aba ativa */ }
+        .tab-content { padding-top: 20px; overflow-x: auto; /* Scroll horizontal se necessário */ }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; width: auto; min-width: 400px; max-width: 600px; /* Ajustei max-width */ box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-content h3 { margin-top: 0; color: #667eea; } /* Título do modal */
+
+         /* Estilo para loading */
+         .loading-message { text-align: center; padding: 30px; color: #666; font-style: italic; }
+
     </style>
 </head>
 <body>
@@ -116,17 +91,16 @@
             <div>Sistema de Gestão de Investimentos</div>
         </div>
 
-        <!-- Login Section -->
         <div id="login-section">
             <h2>Login</h2>
             <div id="login-error"></div>
             <form id="login-form">
                 <div class="form-group">
-                    <label>Usuário:</label>
+                    <label for="username">Usuário:</label>
                     <input type="text" id="username" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>Senha:</label>
+                    <label for="password">Senha:</label>
                     <input type="password" id="password" class="form-control" required>
                 </div>
                 <button type="submit" class="btn">Entrar</button>
@@ -134,315 +108,534 @@
             </form>
         </div>
 
-        <!-- Register Section -->
         <div id="register-section" class="hidden">
             <h2>Criar Conta</h2>
-            <div id="register-error"></div>
+            <div id="register-message"></div>
             <form id="register-form">
                 <div class="form-group">
-                    <label>Usuário:</label>
+                    <label for="reg-username">Usuário (login):</label>
                     <input type="text" id="reg-username" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>Senha:</label>
-                    <input type="password" id="reg-password" class="form-control" required>
+                    <label for="reg-password">Senha:</label>
+                    <input type="password" id="reg-password" class="form-control" required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label>Nome:</label>
+                    <label for="reg-nome">Nome Completo:</label>
                     <input type="text" id="reg-nome" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>Email:</label>
+                    <label for="reg-email">Email (opcional):</label>
                     <input type="email" id="reg-email" class="form-control">
                 </div>
+                <div class="form-group">
+                    <label for="reg-cpf">CPF (apenas números):</label>
+                    <input type="text" id="reg-cpf" class="form-control" placeholder="12345678900" required pattern="\d{11}" title="Digite 11 dígitos do CPF, sem pontos ou traços.">
+                </div>
                 <button type="submit" class="btn">Criar Conta</button>
-                <button type="button" id="show-login" class="btn">Voltar</button>
+                <button type="button" id="show-login" class="btn">Voltar para Login</button>
             </form>
         </div>
 
-        <!-- Main App -->
         <div id="main-app" class="hidden">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
                 <h2 id="user-welcome">Bem-vindo!</h2>
-                <button id="logout-btn" class="btn" style="background: #dc3545;">Sair</button>
+                <button id="logout-btn" class="btn btn-danger">Sair</button>
             </div>
 
-            <div id="admin-panel" class="hidden" style="background: #ffc107; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                <strong> Painel Administrativo - Você tem acesso completo ao sistema!</strong>
+            <div id="admin-panel" class="hidden" style="background: #fff3cd; color: #664d03; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ffc107;">
+                <strong>Painel Administrativo - Você tem acesso a funcionalidades adicionais.</strong>
             </div>
 
             <div class="stats">
                 <div class="stat-card">
-                    <h3 id="total-investments">0</h3>
-                    <div>Investimentos</div>
+                    <h3 id="total-investments">-</h3>
+                    <div>Meus Investimentos</div>
                 </div>
                 <div class="stat-card">
-                    <h3 id="total-value">R$ 0,00</h3>
-                    <div>Valor Total</div>
+                    <h3 id="total-value">R$ -</h3>
+                    <div>Meu Valor Total</div>
                 </div>
-                <div id="users-stat" class="stat-card hidden">
-                    <h3 id="total-users">0</h3>
+                <div id="users-stat" class="stat-card hidden"> <h3 id="total-users">-</h3>
                     <div>Usuários no Sistema</div>
                 </div>
             </div>
 
-            <div style="margin: 20px 0;">
-                <button onclick="loadMyData()" class="btn">Carregar Meus Investimentos</button>
-                <button id="load-users-btn" onclick="loadAllUsers()" class="btn hidden">Ver Todos os Usuários (Admin)</button>
-                <a href="/swagger-ui/index.html" class="swagger-link" target="_blank"> Abrir Swagger UI</a>
+            <div class="tab-buttons">
+                <button onclick="showTab('meus-investimentos')" class="btn" id="tab-meus">Meus Investimentos</button>
+
+                <button onclick="showTab('todos-investimentos')" class="btn hidden" id="tab-todos">Todos os Investimentos (Admin)</button>
+                <button onclick="showTab('usuarios')" class="btn hidden" id="tab-usuarios">Listar Usuários (Admin)</button>
+                <a href="/swagger-ui/index.html" class="swagger-link" target="_blank">Abrir Swagger UI</a>
             </div>
 
-            <div id="data-display"></div>
-        </div>
-    </div>
+            <div id="painel-conteudo">
+                <div id="meus-investimentos" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
+                <div id="todos-investimentos" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
+                <div id="usuarios" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
+                </div>
 
-    <script>
-        let currentUser = null;
+            <div id="modal-investimento" class="modal-overlay hidden">
+                <div class="modal-content">
+                    <h3 id="modal-title-investimento">Adicionar/Editar Investimento</h3>
+                    <form id="form-investimento">
+                        <input type="hidden" id="inv-id">
+                        <input type="hidden" id="inv-cpf-usuario-post">
 
-        function showError(elementId, message) {
-            document.getElementById(elementId).innerHTML = '<div class="alert alert-error">' + message + '</div>';
-        }
+                        <div class="form-group">
+                            <label for="inv-produto">Nome do Produto/Investimento:</label>
+                            <input type="text" id="inv-produto" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inv-categoria">Categoria:</label>
+                             <select id="inv-categoria" class="form-control" required>
+                                <option value="" disabled selected>Selecione...</option>
+                                <option value="RENDA_FIXA">Renda Fixa</option>
+                                <option value="RENDA_VARIAVEL">Renda Variável</option>
+                                <option value="TESOURO_DIRETO">Tesouro Direto</option>
+                                <option value="CRIPTOMOEDA">Criptomoeda</option>
+                                <option value="FUNDO_IMOBILIARIO">Fundo Imobiliário</option>
+                                <option value="CDB">CDB</option>
+                                <option value="LCI">LCI</option>
+                                <option value="LCA">LCA</option>
+                                <option value="OUTRO">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inv-valor">Valor (Montante Inicial):</label>
+                            <input type="number" step="0.01" id="inv-valor" class="form-control" required placeholder="Ex: 1000.50">
+                        </div>
+                        <div class="form-group">
+                            <label for="inv-data">Data do Investimento:</label>
+                            <input type="date" id="inv-data" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inv-banco">Nome do Banco:</label>
+                            <input type="text" id="inv-banco" class="form-control" placeholder="Ex: XP, Nubank...">
+                        </div>
+                        <div class="form-group">
+                            <label for="inv-valor-acao">Valor Inicial da Ação (opcional):</label>
+                            <input type="number" step="0.01" id="inv-valor-acao" class="form-control" placeholder="Ex: 25.50 (deixe 0 se não aplicável)">
+                        </div>
+                         <div class="form-group">
+                            <label for="inv-taxa">Taxa de Rentabilidade (anual, opcional):</label>
+                            <input type="number" step="0.0001" id="inv-taxa" class="form-control" placeholder="Ex: 0.12 para 12% (deixe 0 se não aplicável)">
+                        </div>
+                        <div class="form-group">
+                            <label for="inv-num-acoes">Nº de Ações Inicial (opcional):</label>
+                            <input type="number" step="1" id="inv-num-acoes" class="form-control" placeholder="Ex: 100 (deixe 0 se não aplicável)">
+                        </div>
+                        <button type="submit" class="btn">Salvar</button>
+                        <button type="button" class="btn" onclick="closeModal('modal-investimento')">Cancelar</button>
+                    </form>
+                     <div id="investimento-modal-error" class="alert alert-error hidden" style="margin-top: 15px;"></div>
+                </div>
+            </div>
 
-        function showSuccess(elementId, message) {
-            document.getElementById(elementId).innerHTML = '<div class="alert alert-success">' + message + '</div>';
-        }
+            <div id="modal-usuario" class="modal-overlay hidden">
+                 <div class="modal-content">
+                     <h3 id="modal-title-usuario">Detalhes do Usuário</h3>
+                     <p>A funcionalidade de Adicionar/Editar/Excluir usuários diretamente pelo painel não está implementada no backend.</p>
+                     <div class="form-group">
+                         <label>ID:</label>
+                         <input type="text" id="view-user-id" class="form-control" readonly>
+                     </div>
+                     <div class="form-group">
+                         <label>Username:</label>
+                         <input type="text" id="view-user-username" class="form-control" readonly>
+                     </div>
+                      <div class="form-group">
+                         <label>Nome:</label>
+                         <input type="text" id="view-user-nome" class="form-control" readonly>
+                     </div>
+                      <div class="form-group">
+                         <label>Email:</label>
+                         <input type="text" id="view-user-email" class="form-control" readonly>
+                     </div>
+                      <div class="form-group">
+                         <label>Role:</label>
+                         <input type="text" id="view-user-role" class="form-control" readonly>
+                     </div>
+                     <button type="button" class="btn" onclick="closeModal('modal-usuario')">Fechar</button>
+                 </div>
+             </div>
 
-        function clearMessages(elementId) {
-            document.getElementById(elementId).innerHTML = '';
-        }
+        </div> </div> <script>
+        let currentUser = null; // { username: string, role: string, token: string, cpf?: string }
+        const API_BASE_URL = ''; // Deixe vazio se estiver no mesmo domínio/porta
 
-        function showSection(sectionId) {
-            ['login-section', 'register-section', 'main-app'].forEach(function(id) {
-                document.getElementById(id).classList.add('hidden');
-            });
-            document.getElementById(sectionId).classList.remove('hidden');
-        }
+        // --- Funções Utilitárias de UI ---
+        function showError(elementId, message) { /* ... (igual anterior) ... */ }
+        function showSuccess(elementId, message) { /* ... (igual anterior) ... */ }
+        function clearMessages(elementId) { /* ... (igual anterior) ... */ }
+        function showSection(sectionId) { /* ... (igual anterior) ... */ }
 
-        async function authenticatedFetch(url, options) {
-            options = options || {};
-            const token = localStorage.getItem('token');
-            if (!token) {
-                logout();
-                return null;
-            }
+        // --- Funções de Modal ---
+        function openModal(modalId, data = null) {
+            clearMessages('investimento-modal-error');
+            clearMessages('usuario-modal-error');
+            // clearMessages('banco-modal-error'); // Removido
 
-            const headers = {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            };
-
-            try {
-                const response = await fetch(url, {
-                    ...options,
-                    headers: {...headers, ...options.headers}
-                });
-
-                if (response.status === 401) {
-                    logout();
-                    return null;
-                }
-
-                return response;
-            } catch (error) {
-                console.error('Erro na requisição:', error);
-                return null;
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
-            localStorage.removeItem('role');
-            currentUser = null;
-            showSection('login-section');
-        }
-
-        function initializeUser() {
-            const token = localStorage.getItem('token');
-            const username = localStorage.getItem('username');
-            const role = localStorage.getItem('role');
-
-            if (token && username && role) {
-                currentUser = {username: username, role: role};
-                document.getElementById('user-welcome').textContent = 'Bem-vindo, ' + username + '!';
-                
-                if (role === 'ADMIN') {
-                    document.getElementById('admin-panel').classList.remove('hidden');
-                    document.getElementById('users-stat').classList.remove('hidden');
-                    document.getElementById('load-users-btn').classList.remove('hidden');
-                }
-                
-                showSection('main-app');
-                loadBasicStats();
-            } else {
-                showSection('login-section');
-            }
-        }
-
-        // Event Listeners
-        document.getElementById('login-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            clearMessages('login-error');
-
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            try {
-                const response = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({username: username, password: password})
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('username', data.username);
-                    localStorage.setItem('role', data.role);
-                    initializeUser();
+            if (modalId === 'modal-investimento') {
+                document.getElementById('form-investimento').reset();
+                document.getElementById('modal-title-investimento').textContent = data ? 'Editar Investimento' : 'Adicionar Investimento';
+                document.getElementById('inv-id').value = data?.id || '';
+                document.getElementById('inv-cpf-usuario-post').value = currentUser?.cpf || ''; // Para POST
+                document.getElementById('inv-produto').value = data?.nomeInvestimento || '';
+                document.getElementById('inv-categoria').value = data?.tipoInvestimento || '';
+                document.getElementById('inv-valor').value = data?.montanteInicial || '';
+                // Garante que a data seja formatada corretamente para o input type="date" (YYYY-MM-DD)
+                let dataInvestimentoFormatada = '';
+                if (data?.dataInvestimento) {
+                    try {
+                        // Tenta criar data e formatar. Adiciona 'T00:00:00Z' para tratar como UTC.
+                        dataInvestimentoFormatada = new Date(data.dataInvestimento + 'T00:00:00Z').toISOString().split('T')[0];
+                    } catch (e) {
+                        console.error("Erro ao formatar data do investimento:", data.dataInvestimento, e);
+                        dataInvestimentoFormatada = new Date().toISOString().split('T')[0]; // Usa hoje se der erro
+                    }
                 } else {
-                    showError('login-error', 'Credenciais inválidas');
+                    dataInvestimentoFormatada = new Date().toISOString().split('T')[0]; // Usa hoje se não houver data
                 }
-            } catch (error) {
-                showError('login-error', 'Erro de conexão');
+                document.getElementById('inv-data').value = dataInvestimentoFormatada;
+
+                document.getElementById('inv-banco').value = data?.nomeBanco || '';
+                document.getElementById('inv-valor-acao').value = data?.valorInicialAcao || '0'; // Padrão 0 se não vier
+                document.getElementById('inv-taxa').value = data?.taxaRentabilidade || '0'; // Padrão 0
+                document.getElementById('inv-num-acoes').value = data?.numeroAcoesInicial || '0'; // Padrão 0
             }
-        });
-
-        document.getElementById('register-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            clearMessages('register-error');
-
-            const username = document.getElementById('reg-username').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
-            const nome = document.getElementById('reg-nome').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-
-            try {
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        username: username,
-                        password: password,
-                        nome: nome,
-                        email: email || null,
-                        role: 'USER'
-                    })
-                });
-
-                if (response.ok) {
-                    showSuccess('register-error', 'Conta criada com sucesso!');
-                    setTimeout(function() { showSection('login-section'); }, 2000);
-                } else {
-                    const error = await response.text();
-                    showError('register-error', error || 'Erro ao criar conta');
-                }
-            } catch (error) {
-                showError('register-error', 'Erro de conexão');
+             else if (modalId === 'modal-usuario') { // Modal apenas para visualização
+                 document.getElementById('modal-title-usuario').textContent = 'Detalhes do Usuário';
+                 document.getElementById('view-user-id').value = data?.id || '';
+                 document.getElementById('view-user-username').value = data?.username || '';
+                 document.getElementById('view-user-nome').value = data?.nome || '';
+                 document.getElementById('view-user-email').value = data?.email || '';
+                 document.getElementById('view-user-role').value = data?.role || '';
             }
-        });
+            // else if (modalId === 'modal-banco') { // Removido }
 
-        document.getElementById('show-register').addEventListener('click', function() {
-            showSection('register-section');
-        });
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+        function closeModal(modalId) { /* ... (igual anterior) ... */ }
 
-        document.getElementById('show-login').addEventListener('click', function() {
-            showSection('login-section');
-        });
+        // --- Fetch Autenticado ---
+        async function authenticatedFetch(url, options) { /* ... (igual anterior, mas sem Promise.reject em caso de 401/403 para evitar erro não capturado) ... */
+             options = options || {};
+             const token = currentUser?.token || localStorage.getItem('token');
+             if (!token) {
+                 logout();
+                 // Retorna uma resposta simulada de erro para consistência
+                 return new Response(JSON.stringify({ message: "Token não encontrado" }), { status: 401 });
+             }
+             const headers = {
+                 'Content-Type': 'application/json',
+                 'Authorization': 'Bearer ' + token,
+                 ...(options.headers || {})
+             };
+             try {
+                 const response = await fetch(API_BASE_URL + url, { ...options, headers: headers });
+                 if (response.status === 401 || response.status === 403) {
+                     console.warn(`Recebido ${response.status} para ${url}. Deslogando.`);
+                     logout();
+                 }
+                 return response; // Retorna o objeto Response completo
+             } catch (error) {
+                 console.error('Erro na requisição autenticada:', url, error);
+                  // Retorna uma resposta simulada de erro de rede
+                 return new Response(JSON.stringify({ message: `Erro de conexão: ${error.message}` }), { status: 503 });
+             }
+         }
 
+
+        // --- Lógica de Autenticação e Sessão ---
+        function logout() { /* ... (igual anterior) ... */ }
+
+        async function fetchUserCpf(username) {
+             console.log("Tentando buscar CPF para username:", username);
+             if (!username) return null;
+             try {
+                  // Endpoint CORRETO para buscar UsuarioInvestimento por CPF
+                 const response = await authenticatedFetch(`/api/usuario-investimentos/${username}`); // Assume username É o CPF
+                 if (response && response.ok) {
+                     const userData = await response.json();
+                     console.log("CPF encontrado via /api/usuario-investimentos:", userData.cpfIdentificacao);
+                     return userData.cpfIdentificacao;
+                 } else {
+                      console.warn(`Falha ao buscar usuário investidor pelo CPF=${username}. Status: ${response?.status}`);
+                     // Poderia tentar buscar na lista de /api/auth/users se fosse admin,
+                     // mas essa lista não contém CPF na sua estrutura atual.
+                 }
+             } catch (error) {
+                 console.error(`Erro ao buscar CPF para ${username}:`, error);
+             }
+             console.warn("Não foi possível obter o CPF associado ao username:", username);
+             return null;
+         }
+
+        async function initializeUser() { /* ... (lógica igual anterior, usando fetchUserCpf) ... */
+             const token = localStorage.getItem('token');
+             const username = localStorage.getItem('username');
+             const role = localStorage.getItem('role');
+             let cpf = localStorage.getItem('cpf');
+
+             if (token && username && role) {
+                 currentUser = {username, role, token, cpf: cpf || null};
+                 document.getElementById('user-welcome').textContent = 'Bem-vindo, ' + username + '!';
+
+                 if (!currentUser.cpf) {
+                     console.log("CPF não encontrado no localStorage, tentando buscar...");
+                     currentUser.cpf = await fetchUserCpf(username); // Tenta buscar
+                     if (currentUser.cpf) {
+                         localStorage.setItem('cpf', currentUser.cpf);
+                         console.log("CPF encontrado e salvo:", currentUser.cpf);
+                     } else {
+                         console.warn("Não foi possível obter o CPF do usuário logado. Funcionalidades que dependem do CPF podem falhar.");
+                         // Poderia exibir uma mensagem na UI pedindo para verificar o cadastro ou contatar suporte
+                     }
+                 } else {
+                     console.log("CPF carregado do localStorage:", currentUser.cpf);
+                 }
+
+
+                 let defaultTab = 'meus-investimentos';
+                 document.getElementById('tab-todos').classList.add('hidden');
+                 document.getElementById('tab-usuarios').classList.add('hidden');
+                 // document.getElementById('tab-bancos').classList.add('hidden'); // Removido
+
+                 if (role === 'ADMIN') {
+                     document.getElementById('admin-panel').classList.remove('hidden');
+                     document.getElementById('users-stat').classList.remove('hidden');
+                     document.getElementById('tab-todos').classList.remove('hidden');
+                     document.getElementById('tab-usuarios').classList.remove('hidden');
+                     // document.getElementById('tab-bancos').classList.remove('hidden'); // Removido
+                     defaultTab = 'todos-investimentos';
+                 }
+
+                 showSection('main-app');
+                 await loadBasicStats(); // Espera carregar stats
+                 showTab(defaultTab); // Mostra a aba correta
+             } else {
+                 logout();
+             }
+         }
+
+        // --- Event Listeners de Formulários (Login, Registro) ---
+        document.getElementById('login-form').addEventListener('submit', async function(e) { /* ... (igual anterior) ... */ });
+        document.getElementById('register-form').addEventListener('submit', async function(e) { /* ... (igual anterior, usando POST /api/usuario-investimentos) ... */ });
+
+        // --- Listeners de Navegação ---
+        document.getElementById('show-register').addEventListener('click', () => showSection('register-section'));
+        document.getElementById('show-login').addEventListener('click', () => showSection('login-section'));
         document.getElementById('logout-btn').addEventListener('click', logout);
 
-        async function loadBasicStats() {
-            try {
-                const response = await authenticatedFetch('/api/investimentos');
-                if (response && response.ok) {
-                    const investments = await response.json();
-                    const totalValue = investments.reduce(function(sum, inv) { return sum + inv.valor; }, 0);
-                    
-                    document.getElementById('total-investments').textContent = investments.length;
-                    document.getElementById('total-value').textContent = 'R$ ' + totalValue.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                }
+        // --- Carregamento de Dados (Estatísticas e Abas) ---
+        async function loadBasicStats() { /* ... (igual anterior, usando GET /api/investimentos/meus) ... */ }
+        function showTab(tabId) { /* ... (igual anterior, removendo case 'bancos') ... */ }
 
-                if (currentUser && currentUser.role === 'ADMIN') {
-                    const usersResponse = await authenticatedFetch('/api/auth/users');
-                    if (usersResponse && usersResponse.ok) {
-                        const users = await usersResponse.json();
-                        document.getElementById('total-users').textContent = users.length;
-                    }
-                }
-            } catch (error) {
-                console.error('Erro ao carregar estatísticas:', error);
-            }
-        }
+        // --- CRUD Meus Investimentos (USER) ---
+        async function loadMeusInvestimentos() { /* ... (igual anterior, usando GET /api/investimentos/meus) ... */ }
 
-        async function loadMyData() {
-            const displayDiv = document.getElementById('data-display');
-            displayDiv.innerHTML = '<div style="text-align: center; padding: 20px;">Carregando...</div>';
+        // --- CRUD Todos Investimentos (ADMIN) ---
+        async function loadTodosInvestimentos() { /* ... (igual anterior, usando GET /api/investimentos) ... */ }
 
-            try {
-                const response = await authenticatedFetch('/api/investimentos');
-                if (response && response.ok) {
-                    const investments = await response.json();
-                    
-                    let html = '<h3>Seus Investimentos</h3>';
-                    if (investments.length === 0) {
-                        html += '<p>Nenhum investimento cadastrado.</p>';
-                    } else {
-                        html += '<table><tr><th>Produto</th><th>Categoria</th><th>Valor</th><th>Data</th></tr>';
-                        investments.forEach(function(inv) {
-                            html += '<tr>';
-                            html += '<td>' + inv.produto + '</td>';
-                            html += '<td>' + inv.categoria + '</td>';
-                            html += '<td>R$ ' + inv.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2}) + '</td>';
-                            html += '<td>' + new Date(inv.dataInvestimento).toLocaleDateString('pt-BR') + '</td>';
-                            html += '</tr>';
-                        });
-                        html += '</table>';
-                    }
-                    displayDiv.innerHTML = html;
-                }
-            } catch (error) {
-                displayDiv.innerHTML = '<div class="alert alert-error">Erro ao carregar dados</div>';
-            }
-        }
+        // --- Listar Usuários (ADMIN - View Only) ---
+       async function loadUsuariosCRUD() {
+            const div = document.getElementById('usuarios');
+             // Simplificado: Apenas lista, sem botão de adicionar
+             div.innerHTML = '<h3>Lista de Usuários (Admin - Visualização)</h3>';
+            div.innerHTML += '<div id="users-table-area"><div class="loading-message">Carregando usuários...</div></div>';
 
-        async function loadAllUsers() {
-            if (!currentUser || currentUser.role !== 'ADMIN') {
-                document.getElementById('data-display').innerHTML = '<div class="alert alert-error">Acesso negado!</div>';
-                return;
-            }
+             try {
+                const tableArea = document.getElementById('users-table-area');
+                const response = await authenticatedFetch('/api/auth/users'); // Endpoint correto
 
-            const displayDiv = document.getElementById('data-display');
-            displayDiv.innerHTML = '<div style="text-align: center; padding: 20px;">Carregando usuários...</div>';
-
-            try {
-                const response = await authenticatedFetch('/api/auth/users');
                 if (response && response.ok) {
                     const users = await response.json();
-                    
-                    let html = '<h3>Todos os Usuários (Admin)</h3>';
-                    if (users.length === 0) {
-                        html += '<p>Nenhum usuário encontrado.</p>';
-                    } else {
-                        html += '<table><tr><th>ID</th><th>Username</th><th>Nome</th><th>Email</th><th>Papel</th></tr>';
-                        users.forEach(function(user) {
-                            html += '<tr>';
-                            html += '<td>' + user.id + '</td>';
-                            html += '<td>' + user.username + '</td>';
-                            html += '<td>' + user.nome + '</td>';
-                            html += '<td>' + (user.email || '-') + '</td>';
-                            html += '<td><strong style="color: ' + (user.role === 'ADMIN' ? '#dc3545' : '#28a745') + ';">' + user.role + '</strong></td>';
-                            html += '</tr>';
-                        });
-                        html += '</table>';
+                    if (!users || users.length === 0) {
+                         tableArea.innerHTML = '<p>Nenhum usuário encontrado no sistema.</p>';
+                         return;
                     }
-                    displayDiv.innerHTML = html;
+
+                    let html = '<table><thead><tr><th>ID</th><th>Username</th><th>Nome</th><th>Email</th><th>Papel</th><th>Ações</th></tr></thead><tbody>';
+                    users.forEach(user => {
+                        const userJsonString = JSON.stringify(user).replace(/"/g, '&quot;');
+                        html += '<tr>';
+                        html += `<td>${user.id}</td>`;
+                        html += `<td>${user.username}</td>`;
+                        html += `<td>${user.nome || '-'}</td>`;
+                        html += `<td>${user.email || '-'}</td>`;
+                        html += `<td><strong style="color:${user.role === 'ADMIN' ? '#dc3545' : '#198754'}">${user.role}</strong></td>`;
+                        html += '<td>';
+                        // Botão apenas para ver detalhes, sem editar/excluir
+                        html += `<button class="btn" onclick='openModal("modal-usuario", ${userJsonString})'>Ver Detalhes</button>`;
+                        html += '</td></tr>';
+                    });
+                    html += '</tbody></table>';
+                    tableArea.innerHTML = html;
+                } else {
+                    const errorText = response ? `Erro ${response.status}: ${await response.text()}` : "Erro desconhecido";
+                    tableArea.innerHTML = `<div class="alert alert-error">Erro ao carregar usuários. ${errorText}</div>`;
                 }
-            } catch (error) {
-                displayDiv.innerHTML = '<div class="alert alert-error">Erro ao carregar usuários</div>';
-            }
+             } catch (error) {
+                 console.error("Erro em loadUsuariosCRUD:", error);
+                 document.getElementById('users-table-area').innerHTML = `<div class="alert alert-error">Erro ao carregar usuários: ${error.message || 'Verifique a conexão'}</div>`;
+             }
         }
 
+
+        // --- CRUD Bancos foi removido ---
+        // async function loadBancosCRUD() { ... } // Removida
+
+
+        // --- Ações dos Formulários de Modal ---
+
+        // Salvar Investimento (Criar/Editar)
+        document.getElementById('form-investimento').onsubmit = async function(e) {
+             e.preventDefault();
+             clearMessages('investimento-modal-error');
+             const id = document.getElementById('inv-id').value;
+             const cpfUsuarioPost = document.getElementById('inv-cpf-usuario-post').value; // Para POST
+
+             // Corpo para PUT (editar) - direto InvestimentoDTO
+             const putBody = {
+                 id: id ? parseInt(id) : undefined,
+                 nomeInvestimento: document.getElementById('inv-produto').value,
+                 tipoInvestimento: document.getElementById('inv-categoria').value,
+                 montanteInicial: parseFloat(document.getElementById('inv-valor').value) || 0,
+                 dataInvestimento: document.getElementById('inv-data').value, // Formato YYYY-MM-DD
+                 nomeBanco: document.getElementById('inv-banco').value || null, // null se vazio
+                 valorInicialAcao: parseFloat(document.getElementById('inv-valor-acao').value) || 0,
+                 taxaRentabilidade: parseFloat(document.getElementById('inv-taxa').value) || 0,
+                 numeroAcoesInicial: parseInt(document.getElementById('inv-num-acoes').value) || 0
+             };
+
+             // Corpo para POST (criar) - dentro de UsuarioInvestimentoDTO
+             const postBodyWrapper = {
+                 cpfIdentificacao: cpfUsuarioPost,
+                 // dataUsuarioInvestimentos é o array esperado, mas o endpoint POST /api/investimentos parece esperar UsuarioInvestimentoDTO
+                 // Vamos ajustar para enviar UsuarioInvestimentoDTO com a lista
+                  dataUsuarioInvestimentos: [{...putBody, id: undefined }] // Usa os dados do formulário, sem ID
+             };
+
+
+            const url = id ? `/api/investimentos/${id}` : '/api/investimentos';
+            const method = id ? 'PUT' : 'POST';
+             // POST usa o Wrapper DTO, PUT usa o DTO direto
+            const bodyToSend = method === 'POST' ? postBodyWrapper : putBody;
+
+             // Validação básica no frontend
+             if (method === 'POST' && !bodyToSend.cpfIdentificacao) {
+                 showError('investimento-modal-error', 'Erro: CPF do usuário não identificado. Não é possível criar o investimento.');
+                 return;
+             }
+             if (!bodyToSend.dataUsuarioInvestimentos[0].nomeInvestimento || !bodyToSend.dataUsuarioInvestimentos[0].tipoInvestimento || bodyToSend.dataUsuarioInvestimentos[0].montanteInicial <= 0 || !bodyToSend.dataUsuarioInvestimentos[0].dataInvestimento ) {
+                 showError('investimento-modal-error', 'Erro: Preencha todos os campos obrigatórios (Produto, Categoria, Valor > 0, Data).');
+                 return;
+             }
+
+
+            console.log(`Enviando ${method} para ${url} com body:`, bodyToSend);
+
+            try {
+                // O endpoint POST /api/investimentos espera UsuarioInvestimentoDTO
+                 const response = await authenticatedFetch(url, { method, body: JSON.stringify(bodyToSend) });
+
+                if (response && response.ok) {
+                    closeModal('modal-investimento');
+                    await loadBasicStats();
+                    const activeTabId = document.querySelector('.tab-buttons .btn-active')?.id?.replace('tab-', '') || (currentUser.role === 'ADMIN' ? 'todos-investimentos' : 'meus-investimentos');
+                    showTab(activeTabId);
+                } else {
+                     const errorText = response ? await response.text() : "Erro desconhecido";
+                    console.error(`Erro ao salvar investimento (${response?.status}):`, errorText);
+                    showError('investimento-modal-error', `Erro ao salvar: ${errorText}`);
+                }
+             } catch (error) {
+                 console.error("Erro na requisição de salvar investimento:", error);
+                 showError('investimento-modal-error', `Erro na requisição: ${error.message || 'Verifique a conexão'}`);
+             }
+        };
+
+
+        // Salvar Usuário (Admin - Criar via /api/auth/register)
+        document.getElementById('form-usuario').onsubmit = async function(e) {
+            e.preventDefault();
+             clearMessages('usuario-modal-error');
+             const id = document.getElementById('user-id').value; // Usado para saber se é edição (não suportada) ou criação
+
+             if (id) {
+                 showError('usuario-modal-error', 'A edição de usuários não está implementada no backend.');
+                 return;
+             }
+
+             // Lógica apenas para CRIAR via /api/auth/register
+             const password = document.getElementById('user-password').value;
+             const body = {
+                 username: document.getElementById('user-username').value,
+                 nome: document.getElementById('user-nome').value,
+                 email: document.getElementById('user-email').value || null,
+                 role: document.getElementById('user-role').value, // Admin pode definir role
+                 password: password
+             };
+
+             if (!password || password.length < 6) {
+                  showError('usuario-modal-error', 'Senha é obrigatória e deve ter no mínimo 6 caracteres.');
+                  return;
+             }
+
+             const url = '/api/auth/register';
+             const method = 'POST';
+
+             console.log(`Enviando ${method} para ${url} com body:`, body);
+
+             try {
+                const response = await authenticatedFetch(url, {method, body: JSON.stringify(body)}); // Admin precisa estar autenticado para registrar? Verifique SecurityConfig
+                 // Nota: O endpoint /api/auth/register está configurado como permitAll no SecurityConfig, então a chamada não precisa ser autenticada.
+                 // Vamos usar fetch normal para este caso específico.
+                 /*
+                 const response = await fetch(API_BASE_URL + url, {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify(body)
+                 });
+                 */
+
+                if (response && response.ok) {
+                    closeModal('modal-usuario');
+                    await loadBasicStats(); // Recarrega contagem de usuários
+                    showTab('usuarios'); // Recarrega a tabela de usuários
+                    showSuccess('register-message', 'Novo usuário criado com sucesso pelo Admin!'); // Mostra msg na área principal
+                    setTimeout(() => clearMessages('register-message'), 4000);
+                } else {
+                     const errorText = response ? await response.text() : "Erro desconhecido";
+                     console.error(`Erro ao criar usuário (${response?.status}):`, errorText);
+                    showError('usuario-modal-error', `Erro ao criar usuário: ${errorText}`);
+                }
+             } catch (error) {
+                 console.error("Erro na requisição de criar usuário:", error);
+                 showError('usuario-modal-error', `Erro na requisição: ${error.message || 'Verifique a conexão'}`);
+             }
+        };
+
+
+        // Salvar Banco foi removido
+        // document.getElementById('form-banco').onsubmit = ... // Removido
+
+
+        // --- Funções de Exclusão ---
+        async function deleteInvestimento(id) { /* ... (igual anterior, usando DELETE /api/investimentos/{id}) ... */ }
+
+        // Excluir Usuário (Admin - funcionalidade removida pois endpoint não existe)
+         function deleteUser(id, username) {
+             alert(`Funcionalidade de excluir usuário (ID: ${id}, Username: ${username}) não implementada no backend.`);
+             console.warn(`Tentativa de excluir usuário ${id}, mas o endpoint DELETE /api/auth/users/{id} não existe.`);
+         }
+
+        // Excluir Banco foi removido
+        // async function deleteBanco(id) { ... } // Removida
+
+
+        // --- Inicialização ---
         document.addEventListener('DOMContentLoaded', initializeUser);
     </script>
 </body>

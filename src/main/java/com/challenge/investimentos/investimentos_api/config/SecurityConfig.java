@@ -42,7 +42,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/", "/index.html", "/investae-home.html", "/investimentos.html", "/*.html", "/css/**", "/js/**", "/images/**", "/*.css", "/*.js", "/favicon.ico").permitAll()
+                .requestMatchers("/", "/index.html", "/investae-home", "/investae-home.html", "/*.html", "/static/**", "/css/**", "/js/**", "/images/**", "/*.css", "/*.js", "/favicon.ico").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
             )
