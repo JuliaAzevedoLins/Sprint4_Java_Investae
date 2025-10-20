@@ -38,8 +38,8 @@ public class UsuarioInvestimentoService implements IUsuarioInvestimentoService {
 
     /**
      * Cria um novo usuário investidor com o CPF informado.
-     * @param cpfIdentificacao CPF do usuário
-     * @return 200 quando criado; 400 se CPF ausente ou já existente
+     * param cpfIdentificacao CPF do usuário
+     * return 200 quando criado; 400 se CPF ausente ou já existente
      */
     @Transactional
     public ResponseEntity<String> criarUsuarioInvestimento(String cpfIdentificacao) {
@@ -65,8 +65,8 @@ public class UsuarioInvestimentoService implements IUsuarioInvestimentoService {
      * Limpa a coleção atual (se existir) e popula novamente com base no DTO,
      * validando tipo de investimento e datas.
      *
-     * @param dto dados do usuário e seus investimentos
-     * @return 200 em caso de sucesso; 400 quando houver validação inválida
+     * param dto dados do usuário e seus investimentos
+     * return 200 em caso de sucesso; 400 quando houver validação inválida
      */
     @Transactional
     public ResponseEntity<String> salvarInvestimentos(UsuarioInvestimentoDTO dto) {
@@ -144,7 +144,7 @@ public class UsuarioInvestimentoService implements IUsuarioInvestimentoService {
 
     /**
      * Lista todos os usuários investidores.
-     * @return lista completa de usuários
+     * return lista completa de usuários
      */
     @Transactional(readOnly = true)
     public ResponseEntity<List<UsuarioInvestimento>> listarTodosUsuarios() {
@@ -153,8 +153,8 @@ public class UsuarioInvestimentoService implements IUsuarioInvestimentoService {
 
     /**
      * Busca um usuário pelo CPF.
-     * @param cpf CPF do usuário
-     * @return 200 com o usuário; 404 se não encontrado
+     * param cpf CPF do usuário
+     * return 200 com o usuário; 404 se não encontrado
      */
     @Transactional(readOnly = true)
     public ResponseEntity<?> buscarPorCpf(String cpf) {
@@ -167,8 +167,8 @@ public class UsuarioInvestimentoService implements IUsuarioInvestimentoService {
 
     /**
      * Deleta um usuário e seus investimentos pelo CPF.
-     * @param cpf CPF do usuário
-     * @return 200 quando deletado; 404 se não encontrado
+     * param cpf CPF do usuário
+     * return 200 quando deletado; 404 se não encontrado
      */
     @Transactional
     public ResponseEntity<String> deletarPorCpf(String cpf) {

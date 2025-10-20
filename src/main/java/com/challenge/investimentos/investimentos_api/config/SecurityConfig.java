@@ -15,6 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
+/**
+ * Configuração de segurança da aplicação utilizando Spring Security.
+ *
+ * Define as regras de autenticação, autorização, filtros JWT e endpoints públicos.
+ */
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
@@ -22,16 +28,37 @@ public class SecurityConfig {
     private final JwtTokenProvider tokenProvider;
     private final CustomUserDetailsService userDetailsService;
     
+
+    /**
+     * Construtor para injeção de dependências dos componentes JWT e UserDetails.
+     *
+     * param tokenProvider provedor de tokens JWT
+     * param userDetailsService serviço customizado de detalhes do usuário
+     */
     public SecurityConfig(JwtTokenProvider tokenProvider, CustomUserDetailsService userDetailsService) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
     }
 
+
+    /**
+     * Bean responsável por codificar senhas usando BCrypt.
+     *
+     * return PasswordEncoder para criptografia de senhas
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+
+    /**
+     * Configura a cadeia de filtros de segurança, endpoints públicos e proteção JWT.
+     *
+     * param http objeto de configuração do HttpSecurity
+     * return SecurityFilterChain configurada
+     * throws Exception em caso de erro de configuração
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(tokenProvider, userDetailsService);
@@ -50,6 +77,13 @@ public class SecurityConfig {
             .build();
     }
 
+    /**
+     * Bean para expor o AuthenticationManager do Spring Security.
+     *
+     * param authConfig configuração de autenticação
+     * return AuthenticationManager
+     * throws Exception em caso de erro
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();

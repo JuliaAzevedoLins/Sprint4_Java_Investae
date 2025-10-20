@@ -57,9 +57,6 @@
         .alert { padding: 10px; border-radius: 5px; margin: 15px 0; border: 1px solid transparent; }
         .alert-error { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
         .alert-success { background: #d4edda; color: #155724; border-color: #c3e6cb; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0; } /* Ajustei minmax e gap */
-        .stat-card { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .stat-card h3 { margin: 0 0 5px 0; font-size: 1.5em; } /* Ajustei margem e tamanho */
         .swagger-link { display: inline-block; background: #17a2b8; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin: 5px; font-weight: bold; font-size: 0.9em; }
         .swagger-link:hover { background: #138496; }
 
@@ -79,564 +76,856 @@
         .modal-content { background: white; padding: 30px; border-radius: 10px; width: auto; min-width: 400px; max-width: 600px; /* Ajustei max-width */ box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-content h3 { margin-top: 0; color: #667eea; } /* Título do modal */
 
-         /* Estilo para loading */
-         .loading-message { text-align: center; padding: 30px; color: #666; font-style: italic; }
+        /* Estilo para loading */
+        .loading-message { text-align: center; padding: 30px; color: #666; font-style: italic; }
 
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">Investaê</div>
-            <div>Sistema de Gestão de Investimentos</div>
+<div class="container">
+    <div class="header">
+        <div class="logo">Investaê</div>
+        <div>Sistema de Gestão de Investimentos</div>
+    </div>
+
+    <div id="login-section">
+        <h2>Login</h2>
+        <div id="login-error"></div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Usuário:</label>
+                <input type="text" id="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+            <button type="button" id="show-register" class="btn">Criar Conta</button>
+        </form>
+    </div>
+
+    <div id="register-section" class="hidden">
+        <h2>Criar Conta</h2>
+        <div id="register-message"></div>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="reg-username">Usuário (login):</label>
+                <input type="text" id="reg-username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-password">Senha:</label>
+                <input type="password" id="reg-password" class="form-control" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label for="reg-nome">Nome Completo:</label>
+                <input type="text" id="reg-nome" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-email">Email (opcional):</label>
+                <input type="email" id="reg-email" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="reg-cpf">CPF (apenas números):</label>
+                <input type="text" id="reg-cpf" class="form-control" placeholder="12345678900" required pattern="\d{11}" title="Digite 11 dígitos do CPF, sem pontos ou traços.">
+            </div>
+            <button type="submit" class="btn">Criar Conta</button>
+            <button type="button" id="show-login" class="btn">Voltar para Login</button>
+        </form>
+    </div>
+
+    <div id="main-app" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+            <h2 id="user-welcome">Bem-vindo!</h2>
+            <button id="logout-btn" class="btn btn-danger">Sair</button>
         </div>
 
-        <div id="login-section">
-            <h2>Login</h2>
-            <div id="login-error"></div>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">Usuário:</label>
-                    <input type="text" id="username" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Senha:</label>
-                    <input type="password" id="password" class="form-control" required>
-                </div>
-                <button type="submit" class="btn">Entrar</button>
-                <button type="button" id="show-register" class="btn">Criar Conta</button>
-            </form>
+        <div id="admin-panel" class="hidden" style="background: #fff3cd; color: #664d03; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ffc107;">
+            <strong>🛡️ Painel Administrativo - Você tem acesso total ao sistema</strong>
         </div>
 
-        <div id="register-section" class="hidden">
-            <h2>Criar Conta</h2>
-            <div id="register-message"></div>
-            <form id="register-form">
-                <div class="form-group">
-                    <label for="reg-username">Usuário (login):</label>
-                    <input type="text" id="reg-username" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="reg-password">Senha:</label>
-                    <input type="password" id="reg-password" class="form-control" required minlength="6">
-                </div>
-                <div class="form-group">
-                    <label for="reg-nome">Nome Completo:</label>
-                    <input type="text" id="reg-nome" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="reg-email">Email (opcional):</label>
-                    <input type="email" id="reg-email" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="reg-cpf">CPF (apenas números):</label>
-                    <input type="text" id="reg-cpf" class="form-control" placeholder="12345678900" required pattern="\d{11}" title="Digite 11 dígitos do CPF, sem pontos ou traços.">
-                </div>
-                <button type="submit" class="btn">Criar Conta</button>
-                <button type="button" id="show-login" class="btn">Voltar para Login</button>
-            </form>
+        <div id="user-panel" class="hidden" style="background: #e7f3ff; color: #004085; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #b3d4fc;">
+            <strong>👤 Painel do Usuário - Gerencie seus investimentos</strong>
         </div>
 
-        <div id="main-app" class="hidden">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
-                <h2 id="user-welcome">Bem-vindo!</h2>
-                <button id="logout-btn" class="btn btn-danger">Sair</button>
-            </div>
+        <div class="tab-buttons">"
+            <button onclick="showTab('meus-investimentos')" class="btn" id="tab-meus">Meus Investimentos</button>
 
-            <div id="admin-panel" class="hidden" style="background: #fff3cd; color: #664d03; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ffc107;">
-                <strong>Painel Administrativo - Você tem acesso a funcionalidades adicionais.</strong>
-            </div>
+            <button onclick="showTab('todos-investimentos')" class="btn hidden" id="tab-todos">Todos os Investimentos (Admin)</button>
+            <button onclick="showTab('usuarios')" class="btn hidden" id="tab-usuarios">Listar Usuários (Admin)</button>
+            <a href="/swagger-ui/index.html" class="swagger-link" target="_blank">Abrir Swagger UI</a>
+        </div>
 
-            <div class="stats">
-                <div class="stat-card">
-                    <h3 id="total-investments">-</h3>
-                    <div>Meus Investimentos</div>
+        <div id="painel-conteudo">
+            <div id="meus-investimentos" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
+            <div id="todos-investimentos" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
+            <div id="usuarios" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
+        </div>
+
+        <div id="modal-investimento" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3 id="modal-title-investimento">Adicionar/Editar Investimento</h3>
+                <form id="form-investimento">
+                    <input type="hidden" id="inv-id">
+                    <input type="hidden" id="inv-cpf-usuario-post"> <div class="form-group">
+                    <label for="inv-produto">Nome do Produto/Investimento *:</label>
+                    <input type="text" id="inv-produto" class="form-control" required>
                 </div>
-                <div class="stat-card">
-                    <h3 id="total-value">R$ -</h3>
-                    <div>Meu Valor Total</div>
-                </div>
-                <div id="users-stat" class="stat-card hidden"> <h3 id="total-users">-</h3>
-                    <div>Usuários no Sistema</div>
-                </div>
+                    <div class="form-group">
+                        <label for="inv-categoria">Categoria *:</label>
+                        <select id="inv-categoria" class="form-control" required>
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="RENDA_FIXA">Renda Fixa</option>
+                            <option value="RENDA_VARIAVEL">Renda Variável</option>
+                            <option value="TESOURO_DIRETO">Tesouro Direto</option>
+                            <option value="CRIPTOMOEDA">Criptomoeda</option>
+                            <option value="FUNDO_IMOBILIARIO">Fundo Imobiliário</option>
+                            <option value="CDB">CDB</option>
+                            <option value="LCI">LCI</option>
+                            <option value="LCA">LCA</option>
+                            <option value="OUTRO">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-valor">Valor (Montante Inicial) *:</label>
+                        <input type="number" step="0.01" id="inv-valor" class="form-control" required placeholder="Ex: 1000.50">
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-data">Data do Investimento *:</label>
+                        <input type="date" id="inv-data" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-banco">Nome do Banco:</label>
+                        <input type="text" id="inv-banco" class="form-control" placeholder="Ex: XP, Nubank...">
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-valor-acao">Valor Inicial da Ação (opcional):</label>
+                        <input type="number" step="0.01" id="inv-valor-acao" class="form-control" placeholder="Ex: 25.50 (deixe 0 se não aplicável)">
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-taxa">Taxa de Rentabilidade (anual, opcional):</label>
+                        <input type="number" step="0.0001" id="inv-taxa" class="form-control" placeholder="Ex: 0.12 para 12% (deixe 0 se não aplicável)">
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-num-acoes">Nº de Ações Inicial (opcional):</label>
+                        <input type="number" step="1" id="inv-num-acoes" class="form-control" placeholder="Ex: 100 (deixe 0 se não aplicável)">
+                    </div>
+                    <button type="submit" class="btn">Salvar</button>
+                    <button type="button" class="btn" onclick="closeModal('modal-investimento')">Cancelar</button>
+                </form>
+                <div id="investimento-modal-error" class="alert alert-error hidden" style="margin-top: 15px;"></div>
             </div>
+        </div>
 
-            <div class="tab-buttons">
-                <button onclick="showTab('meus-investimentos')" class="btn" id="tab-meus">Meus Investimentos</button>
-
-                <button onclick="showTab('todos-investimentos')" class="btn hidden" id="tab-todos">Todos os Investimentos (Admin)</button>
-                <button onclick="showTab('usuarios')" class="btn hidden" id="tab-usuarios">Listar Usuários (Admin)</button>
-                <a href="/swagger-ui/index.html" class="swagger-link" target="_blank">Abrir Swagger UI</a>
-            </div>
-
-            <div id="painel-conteudo">
-                <div id="meus-investimentos" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
-                <div id="todos-investimentos" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
-                <div id="usuarios" class="tab-content hidden"><div class="loading-message">Carregando...</div></div>
+        <div id="modal-usuario" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3 id="modal-title-usuario">Detalhes do Usuário</h3>
+                <p>A funcionalidade de Adicionar/Editar/Excluir usuários diretamente pelo painel não está implementada no backend.</p>
+                <div class="form-group">
+                    <label>ID:</label>
+                    <input type="text" id="view-user-id" class="form-control" readonly>
                 </div>
-
-            <div id="modal-investimento" class="modal-overlay hidden">
-                <div class="modal-content">
-                    <h3 id="modal-title-investimento">Adicionar/Editar Investimento</h3>
-                    <form id="form-investimento">
-                        <input type="hidden" id="inv-id">
-                        <input type="hidden" id="inv-cpf-usuario-post">
-
-                        <div class="form-group">
-                            <label for="inv-produto">Nome do Produto/Investimento:</label>
-                            <input type="text" id="inv-produto" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="inv-categoria">Categoria:</label>
-                             <select id="inv-categoria" class="form-control" required>
-                                <option value="" disabled selected>Selecione...</option>
-                                <option value="RENDA_FIXA">Renda Fixa</option>
-                                <option value="RENDA_VARIAVEL">Renda Variável</option>
-                                <option value="TESOURO_DIRETO">Tesouro Direto</option>
-                                <option value="CRIPTOMOEDA">Criptomoeda</option>
-                                <option value="FUNDO_IMOBILIARIO">Fundo Imobiliário</option>
-                                <option value="CDB">CDB</option>
-                                <option value="LCI">LCI</option>
-                                <option value="LCA">LCA</option>
-                                <option value="OUTRO">Outro</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="inv-valor">Valor (Montante Inicial):</label>
-                            <input type="number" step="0.01" id="inv-valor" class="form-control" required placeholder="Ex: 1000.50">
-                        </div>
-                        <div class="form-group">
-                            <label for="inv-data">Data do Investimento:</label>
-                            <input type="date" id="inv-data" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="inv-banco">Nome do Banco:</label>
-                            <input type="text" id="inv-banco" class="form-control" placeholder="Ex: XP, Nubank...">
-                        </div>
-                        <div class="form-group">
-                            <label for="inv-valor-acao">Valor Inicial da Ação (opcional):</label>
-                            <input type="number" step="0.01" id="inv-valor-acao" class="form-control" placeholder="Ex: 25.50 (deixe 0 se não aplicável)">
-                        </div>
-                         <div class="form-group">
-                            <label for="inv-taxa">Taxa de Rentabilidade (anual, opcional):</label>
-                            <input type="number" step="0.0001" id="inv-taxa" class="form-control" placeholder="Ex: 0.12 para 12% (deixe 0 se não aplicável)">
-                        </div>
-                        <div class="form-group">
-                            <label for="inv-num-acoes">Nº de Ações Inicial (opcional):</label>
-                            <input type="number" step="1" id="inv-num-acoes" class="form-control" placeholder="Ex: 100 (deixe 0 se não aplicável)">
-                        </div>
-                        <button type="submit" class="btn">Salvar</button>
-                        <button type="button" class="btn" onclick="closeModal('modal-investimento')">Cancelar</button>
-                    </form>
-                     <div id="investimento-modal-error" class="alert alert-error hidden" style="margin-top: 15px;"></div>
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="view-user-username" class="form-control" readonly>
                 </div>
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <input type="text" id="view-user-nome" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="text" id="view-user-email" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Role:</label>
+                    <input type="text" id="view-user-role" class="form-control" readonly>
+                </div>
+                <button type="button" class="btn" onclick="closeModal('modal-usuario')">Fechar</button>
             </div>
+        </div>
 
-            <div id="modal-usuario" class="modal-overlay hidden">
-                 <div class="modal-content">
-                     <h3 id="modal-title-usuario">Detalhes do Usuário</h3>
-                     <p>A funcionalidade de Adicionar/Editar/Excluir usuários diretamente pelo painel não está implementada no backend.</p>
-                     <div class="form-group">
-                         <label>ID:</label>
-                         <input type="text" id="view-user-id" class="form-control" readonly>
-                     </div>
-                     <div class="form-group">
-                         <label>Username:</label>
-                         <input type="text" id="view-user-username" class="form-control" readonly>
-                     </div>
-                      <div class="form-group">
-                         <label>Nome:</label>
-                         <input type="text" id="view-user-nome" class="form-control" readonly>
-                     </div>
-                      <div class="form-group">
-                         <label>Email:</label>
-                         <input type="text" id="view-user-email" class="form-control" readonly>
-                     </div>
-                      <div class="form-group">
-                         <label>Role:</label>
-                         <input type="text" id="view-user-role" class="form-control" readonly>
-                     </div>
-                     <button type="button" class="btn" onclick="closeModal('modal-usuario')">Fechar</button>
-                 </div>
-             </div>
+        <div id="modal-novo-usuario" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3>🔧 Criar Novo Usuário Investidor (Admin)</h3>
+                <p>Cria apenas o registro do investidor (CPF). O login/senha deve ser criado separadamente.</p>
+                <form id="form-novo-usuario">
+                    <div class="form-group">
+                        <label for="novo-cpf">CPF *:</label>
+                        <input type="text" id="novo-cpf" class="form-control" placeholder="000.000.000-00" maxlength="14" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="novo-nome">Nome Completo (Opcional):</label>
+                        <input type="text" id="novo-nome" class="form-control" placeholder="Nome do investidor">
+                    </div>
+                    <div class="form-group">
+                        <label for="novo-email">E-mail (Opcional):</label>
+                        <input type="email" id="novo-email" class="form-control" placeholder="email@exemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn">✅ Criar Investidor</button>
+                        <button type="button" class="btn" onclick="closeModal('modal-novo-usuario')">❌ Cancelar</button>
+                    </div>
+                </form>
+                <div id="novo-usuario-error" class="alert alert-error hidden" style="margin-top: 15px;"></div>
+            </div>
+        </div>
 
-        </div> </div> <script>
-        let currentUser = null; // { username: string, role: string, token: string, cpf?: string }
-        const API_BASE_URL = ''; // Deixe vazio se estiver no mesmo domínio/porta
+    </div> </div> <script>
+    let currentUser = null; // { username: string, role: string, token: string, cpf?: string }
+    // AJUSTE A URL DA SUA API AQUI!
+    // Deixe '' (vazio) se o frontend e backend estiverem no mesmo domínio após o deploy.
+    const API_BASE_URL = 'http://localhost:8080';
 
-        // --- Funções Utilitárias de UI ---
-        function showError(elementId, message) { /* ... (igual anterior) ... */ }
-        function showSuccess(elementId, message) { /* ... (igual anterior) ... */ }
-        function clearMessages(elementId) { /* ... (igual anterior) ... */ }
-        function showSection(sectionId) { /* ... (igual anterior) ... */ }
-
-        // --- Funções de Modal ---
-        function openModal(modalId, data = null) {
-            clearMessages('investimento-modal-error');
-            clearMessages('usuario-modal-error');
-            // clearMessages('banco-modal-error'); // Removido
-
-            if (modalId === 'modal-investimento') {
-                document.getElementById('form-investimento').reset();
-                document.getElementById('modal-title-investimento').textContent = data ? 'Editar Investimento' : 'Adicionar Investimento';
-                document.getElementById('inv-id').value = data?.id || '';
-                document.getElementById('inv-cpf-usuario-post').value = currentUser?.cpf || ''; // Para POST
-                document.getElementById('inv-produto').value = data?.nomeInvestimento || '';
-                document.getElementById('inv-categoria').value = data?.tipoInvestimento || '';
-                document.getElementById('inv-valor').value = data?.montanteInicial || '';
-                // Garante que a data seja formatada corretamente para o input type="date" (YYYY-MM-DD)
-                let dataInvestimentoFormatada = '';
-                if (data?.dataInvestimento) {
-                    try {
-                        // Tenta criar data e formatar. Adiciona 'T00:00:00Z' para tratar como UTC.
-                        dataInvestimentoFormatada = new Date(data.dataInvestimento + 'T00:00:00Z').toISOString().split('T')[0];
-                    } catch (e) {
-                        console.error("Erro ao formatar data do investimento:", data.dataInvestimento, e);
-                        dataInvestimentoFormatada = new Date().toISOString().split('T')[0]; // Usa hoje se der erro
-                    }
-                } else {
-                    dataInvestimentoFormatada = new Date().toISOString().split('T')[0]; // Usa hoje se não houver data
-                }
-                document.getElementById('inv-data').value = dataInvestimentoFormatada;
-
-                document.getElementById('inv-banco').value = data?.nomeBanco || '';
-                document.getElementById('inv-valor-acao').value = data?.valorInicialAcao || '0'; // Padrão 0 se não vier
-                document.getElementById('inv-taxa').value = data?.taxaRentabilidade || '0'; // Padrão 0
-                document.getElementById('inv-num-acoes').value = data?.numeroAcoesInicial || '0'; // Padrão 0
-            }
-             else if (modalId === 'modal-usuario') { // Modal apenas para visualização
-                 document.getElementById('modal-title-usuario').textContent = 'Detalhes do Usuário';
-                 document.getElementById('view-user-id').value = data?.id || '';
-                 document.getElementById('view-user-username').value = data?.username || '';
-                 document.getElementById('view-user-nome').value = data?.nome || '';
-                 document.getElementById('view-user-email').value = data?.email || '';
-                 document.getElementById('view-user-role').value = data?.role || '';
-            }
-            // else if (modalId === 'modal-banco') { // Removido }
-
-            document.getElementById(modalId).classList.remove('hidden');
+    // --- Funções Utilitárias de UI ---
+    function showError(elementId, message) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.innerHTML = `<div class="alert alert-error">${message}</div>`;
+            element.classList.remove('hidden');
         }
-        function closeModal(modalId) { /* ... (igual anterior) ... */ }
+    }
+    function showSuccess(elementId, message) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.innerHTML = `<div class="alert alert-success">${message}</div>`;
+            element.classList.remove('hidden');
+        }
+    }
+    function clearMessages(elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.innerHTML = '';
+            element.classList.add('hidden'); // Esconde a div de mensagem
+        }
+    }
+    function showSection(sectionId) {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('register-section').classList.add('hidden');
+        document.getElementById('main-app').classList.add('hidden');
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.remove('hidden');
+        }
+    }
 
-        // --- Fetch Autenticado ---
-        async function authenticatedFetch(url, options) { /* ... (igual anterior, mas sem Promise.reject em caso de 401/403 para evitar erro não capturado) ... */
-             options = options || {};
-             const token = currentUser?.token || localStorage.getItem('token');
-             if (!token) {
-                 logout();
-                 // Retorna uma resposta simulada de erro para consistência
-                 return new Response(JSON.stringify({ message: "Token não encontrado" }), { status: 401 });
-             }
-             const headers = {
-                 'Content-Type': 'application/json',
-                 'Authorization': 'Bearer ' + token,
-                 ...(options.headers || {})
-             };
-             try {
-                 const response = await fetch(API_BASE_URL + url, { ...options, headers: headers });
-                 if (response.status === 401 || response.status === 403) {
-                     console.warn(`Recebido ${response.status} para ${url}. Deslogando.`);
-                     logout();
-                 }
-                 return response; // Retorna o objeto Response completo
-             } catch (error) {
-                 console.error('Erro na requisição autenticada:', url, error);
-                  // Retorna uma resposta simulada de erro de rede
-                 return new Response(JSON.stringify({ message: `Erro de conexão: ${error.message}` }), { status: 503 });
-             }
-         }
+    // --- Funções de Modal ---
+    function openModal(modalId, data = null) {
+        clearMessages('investimento-modal-error');
+        clearMessages('novo-usuario-error'); // Limpa erro do modal de usuário
+
+        const modal = document.getElementById(modalId);
+        if (!modal) {
+            console.error("Modal não encontrado:", modalId);
+            return;
+        }
+
+        if (modalId === 'modal-investimento') {
+            document.getElementById('form-investimento').reset();
+            document.getElementById('modal-title-investimento').textContent = data ? 'Editar Investimento' : 'Adicionar Investimento';
+            document.getElementById('inv-id').value = data?.id || '';
+            // O CPF do usuário logado deve ser adicionado no momento de salvar, se necessário
+            // document.getElementById('inv-cpf-usuario-post').value = currentUser?.cpf || '';
+            document.getElementById('inv-produto').value = data?.nomeInvestimento || '';
+            document.getElementById('inv-categoria').value = data?.tipoInvestimento || '';
+            document.getElementById('inv-valor').value = data?.montanteInicial || '';
+
+            let dataInvestimentoFormatada = '';
+            if (data?.dataInvestimento) {
+                try {
+                    dataInvestimentoFormatada = new Date(data.dataInvestimento + 'T00:00:00Z').toISOString().split('T')[0];
+                } catch (e) {
+                    console.error("Erro ao formatar data:", data.dataInvestimento, e);
+                    dataInvestimentoFormatada = new Date().toISOString().split('T')[0];
+                }
+            } else {
+                dataInvestimentoFormatada = new Date().toISOString().split('T')[0];
+            }
+            document.getElementById('inv-data').value = dataInvestimentoFormatada;
+
+            document.getElementById('inv-banco').value = data?.nomeBanco || '';
+            document.getElementById('inv-valor-acao').value = data?.valorInicialAcao || '0';
+            document.getElementById('inv-taxa').value = data?.taxaRentabilidade || '0';
+            document.getElementById('inv-num-acoes').value = data?.numeroAcoesInicial || '0';
+
+        } else if (modalId === 'modal-usuario') { // Modal apenas para visualização
+            document.getElementById('modal-title-usuario').textContent = 'Detalhes do Usuário';
+            document.getElementById('view-user-id').value = data?.id || '';
+            document.getElementById('view-user-username').value = data?.username || '';
+            document.getElementById('view-user-nome').value = data?.nome || ''; // Ajuste se o nome vier diferente da API
+            document.getElementById('view-user-email').value = data?.email || ''; // Ajuste se o email vier diferente da API
+            // Determina a role (pode vir dentro de um array 'roles')
+            const userRole = data?.role || (data?.roles && data.roles.length > 0 ? data.roles[0].nome || 'USER' : 'USER');
+            document.getElementById('view-user-role').value = userRole;
+
+        } else if (modalId === 'modal-novo-usuario') {
+            document.getElementById('form-novo-usuario').reset(); // Limpa ao abrir
+        }
+
+        modal.classList.remove('hidden');
+    }
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if(modal) {
+            modal.classList.add('hidden');
+        }
+        clearMessages('investimento-modal-error');
+        clearMessages('novo-usuario-error');
+    }
+
+    // --- Funções Globais (devem estar fora do DOMContentLoaded) ---
+
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-buttons .btn').forEach(btn => btn.classList.remove('btn-active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+
+        const activeButton = document.getElementById(`tab-${tabId.split('-')[0]}`); // Ajuste para pegar 'meus', 'todos', 'usuarios'
+        if (activeButton) {
+            activeButton.classList.add('btn-active');
+        }
+
+        const activeContent = document.getElementById(tabId);
+        if (activeContent) {
+            activeContent.classList.remove('hidden');
+            // Carrega os dados SOMENTE quando a aba é mostrada
+            switch (tabId) {
+                case 'meus-investimentos':
+                    loadMeusInvestimentos();
+                    break;
+                case 'todos-investimentos':
+                    if (currentUser?.role === 'ADMIN') loadTodosInvestimentos();
+                    break;
+                case 'usuarios':
+                    if (currentUser?.role === 'ADMIN') loadUsuariosCRUD();
+                    break;
+            }
+        } else {
+            console.error("Conteúdo da aba não encontrado:", tabId);
+        }
+    }
+
+    // --- Fetch Autenticado ---
+    async function authenticatedFetch(url, options) {
+        options = options || {};
+        const token = currentUser?.token || localStorage.getItem('token');
+        if (!token) {
+            logout();
+            return new Response(JSON.stringify({ message: "Token não encontrado" }), { status: 401 });
+        }
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            ...(options.headers || {})
+        };
+        try {
+            const response = await fetch(API_BASE_URL + url, { ...options, headers: headers });
+            if (!response.ok && (response.status === 401 || response.status === 403)) {
+                console.warn(`Recebido ${response.status} para ${url}. Deslogando.`);
+                logout(); // Desloga se o token for inválido ou não autorizado
+            }
+            return response; // Retorna o objeto Response completo
+        } catch (error) {
+            console.error('Erro na requisição autenticada:', url, error);
+            return new Response(JSON.stringify({ message: `Erro de conexão: ${error.message}` }), { status: 503 });
+        }
+    }
 
 
-        // --- Lógica de Autenticação e Sessão ---
-        function logout() { /* ... (igual anterior) ... */ }
+    // --- Lógica de Autenticação e Sessão ---
+    function logout() {
+        currentUser = null;
+        localStorage.clear(); // Limpa todo o localStorage ao sair
+        showSection('login-section');
+    }
 
-        async function fetchUserCpf(username) {
-             console.log("Tentando buscar CPF para username:", username);
-             if (!username) return null;
-             try {
-                  // Endpoint CORRETO para buscar UsuarioInvestimento por CPF
-                 const response = await authenticatedFetch(`/api/usuario-investimentos/${username}`); // Assume username É o CPF
-                 if (response && response.ok) {
-                     const userData = await response.json();
-                     console.log("CPF encontrado via /api/usuario-investimentos:", userData.cpfIdentificacao);
-                     return userData.cpfIdentificacao;
-                 } else {
-                      console.warn(`Falha ao buscar usuário investidor pelo CPF=${username}. Status: ${response?.status}`);
-                     // Poderia tentar buscar na lista de /api/auth/users se fosse admin,
-                     // mas essa lista não contém CPF na sua estrutura atual.
-                 }
-             } catch (error) {
-                 console.error(`Erro ao buscar CPF para ${username}:`, error);
-             }
-             console.warn("Não foi possível obter o CPF associado ao username:", username);
-             return null;
-         }
+    async function initializeUser() {
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+        const role = localStorage.getItem('role');
 
-        async function initializeUser() { /* ... (lógica igual anterior, usando fetchUserCpf) ... */
-             const token = localStorage.getItem('token');
-             const username = localStorage.getItem('username');
-             const role = localStorage.getItem('role');
-             let cpf = localStorage.getItem('cpf');
+        if (token && username && role) {
+            currentUser = {username, role, token};
+            document.getElementById('user-welcome').textContent = 'Bem-vindo, ' + username + '!';
 
-             if (token && username && role) {
-                 currentUser = {username, role, token, cpf: cpf || null};
-                 document.getElementById('user-welcome').textContent = 'Bem-vindo, ' + username + '!';
+            let defaultTab = 'meus-investimentos';
+            // Controla visibilidade de painéis e abas de admin
+            const isAdmin = role === 'ADMIN';
+            document.getElementById('admin-panel').classList.toggle('hidden', !isAdmin);
+            document.getElementById('user-panel').classList.toggle('hidden', isAdmin);
+            document.getElementById('tab-todos').classList.toggle('hidden', !isAdmin);
+            document.getElementById('tab-usuarios').classList.toggle('hidden', !isAdmin);
 
-                 if (!currentUser.cpf) {
-                     console.log("CPF não encontrado no localStorage, tentando buscar...");
-                     currentUser.cpf = await fetchUserCpf(username); // Tenta buscar
-                     if (currentUser.cpf) {
-                         localStorage.setItem('cpf', currentUser.cpf);
-                         console.log("CPF encontrado e salvo:", currentUser.cpf);
-                     } else {
-                         console.warn("Não foi possível obter o CPF do usuário logado. Funcionalidades que dependem do CPF podem falhar.");
-                         // Poderia exibir uma mensagem na UI pedindo para verificar o cadastro ou contatar suporte
-                     }
-                 } else {
-                     console.log("CPF carregado do localStorage:", currentUser.cpf);
-                 }
+            if (isAdmin) {
+                defaultTab = 'todos-investimentos';
+            }
+
+            showSection('main-app');
+            showTab(defaultTab); // Mostra a aba inicial correta
+
+        } else {
+            logout(); // Se faltar algo no localStorage, desloga
+        }
+    }
+
+    // --- CRUD Meus Investimentos (USER) ---
+    async function loadMeusInvestimentos() {
+        console.log('🚀 Carregando Meus Investimentos da API...');
+        const div = document.getElementById('meus-investimentos');
+        div.innerHTML = '<div class="loading-message">Carregando seus investimentos...</div>';
+
+        try {
+            // Usar endpoint correto que busca pelo usuário logado
+            const response = await authenticatedFetch(`/api/investimentos/meus`);
+
+            if (response && response.ok) {
+                const investimentos = await response.json();
+
+                let htmlContent = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>Meus Investimentos</h3>
+                            <button onclick="openModal('modal-investimento')" class="btn">➕ Novo Investimento</button>
+                        </div>
+                    `;
+
+                if (investimentos && investimentos.length > 0) {
+                    htmlContent += `
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Tipo</th>
+                                        <th>Valor Inicial</th>
+                                        <th>Data</th>
+                                        <th>Banco</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+                    investimentos.forEach(inv => {
+                        const valorFormatado = (inv.montanteInicial || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        const dataFormatada = inv.dataInvestimento ? new Date(inv.dataInvestimento + 'T00:00:00Z').toLocaleDateString('pt-BR') : 'N/A';
+                        // Prepara o objeto para passar ao editar
+                        const invDataString = JSON.stringify(inv).replace(/'/g, "&apos;");
+
+                        htmlContent += `
+                                <tr>
+                                    <td><strong>${inv.nomeInvestimento || 'N/A'}</strong></td>
+                                    <td><span style="background: #28a745; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.8em;">${inv.tipoInvestimento || 'N/A'}</span></td>
+                                    <td><strong>R$ ${valorFormatado}</strong></td>
+                                    <td>${dataFormatada}</td>
+                                    <td>${inv.nomeBanco || 'N/A'}</td>
+                                    <td>
+                                        <button onclick='editarInvestimento(${invDataString})' class="btn" title="Editar investimento">✏️ Editar</button>
+                                        <button onclick="deleteInvestimento(${inv.id})" class="btn btn-danger" title="Excluir investimento">🗑️ Excluir</button>
+                                    </td>
+                                </tr>
+                            `;
+                    });
+                    htmlContent += '</tbody></table>';
+                } else {
+                    htmlContent += '<p style="text-align: center; margin-top: 20px;">Você ainda não possui investimentos cadastrados.</p>';
+                }
+                div.innerHTML = htmlContent;
+                console.log('✅ Meus Investimentos carregados da API:', investimentos.length, 'itens');
+
+            } else {
+                const errorText = response ? await response.text() : 'Erro desconhecido';
+                console.error('Erro ao carregar meus investimentos:', response?.status, errorText);
+                div.innerHTML = `<div class="alert alert-error">Erro ao carregar seus investimentos: ${errorText} (Status: ${response?.status})</div>`;
+            }
+        } catch (error) {
+            console.error('Erro de conexão ao carregar meus investimentos:', error);
+            div.innerHTML = `<div class="alert alert-error">Erro de conexão ao buscar seus investimentos: ${error.message}</div>`;
+        }
+    }
+
+    // --- CRUD Todos Investimentos (ADMIN) ---
+    async function loadTodosInvestimentos() {
+        console.log('🚀 Carregando Todos os Investimentos (Admin) da API...');
+        const div = document.getElementById('todos-investimentos');
+        div.innerHTML = '<div class="loading-message">Carregando dados reais...</div>';
+
+        try {
+            // AJUSTE O ENDPOINT SE NECESSÁRIO!
+            const response = await authenticatedFetch('/api/investimentos');
+
+            if (response && response.ok) {
+                const investimentos = await response.json();
+
+                let htmlAdmin = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>🎯 Todos os Investimentos (Admin)</h3>
+                            <div>
+                                <button onclick="abrirModalNovoInvestimento()" class="btn">➕ Novo Investimento</button>
+                                <button onclick="abrirModalNovoUsuario()" class="btn btn-warning">👤 Novo Usuário Investidor</button>
+                            </div>
+                        </div>
+                    `;
+
+                if (investimentos && investimentos.length > 0) {
+                    htmlAdmin += `
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Produto</th>
+                                        <th>Tipo</th>
+                                        <th>Valor Inicial</th>
+                                        <th>Data</th>
+                                        <th>Banco</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+                    investimentos.forEach(inv => {
+                        const valorFormatado = (inv.montanteInicial || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        const dataFormatada = inv.dataInvestimento ? new Date(inv.dataInvestimento + 'T00:00:00Z').toLocaleDateString('pt-BR') : 'N/A';
+                        // Prepara o objeto para passar ao editar
+                        const invDataString = JSON.stringify(inv).replace(/'/g, "&apos;");
+
+                        htmlAdmin += `
+                                <tr>
+                                    <td><strong>#${inv.id}</strong></td>
+                                    <td><strong>${inv.nomeInvestimento || 'N/A'}</strong></td>
+                                    <td><span style="background: #17a2b8; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.8em;">${inv.tipoInvestimento || 'N/A'}</span></td>
+                                    <td><strong>R$ ${valorFormatado}</strong></td>
+                                    <td>${dataFormatada}</td>
+                                    <td>${inv.nomeBanco || 'N/A'}</td>
+                                    <td>
+                                        <button onclick='editarInvestimento(${invDataString})' class="btn" title="Editar investimento">✏️ Editar</button>
+                                        <button onclick="deleteInvestimento(${inv.id})" class="btn btn-danger" title="Excluir investimento">🗑️ Excluir</button>
+                                    </td>
+                                </tr>
+                            `;
+                    });
+                    htmlAdmin += '</tbody></table>';
+                } else {
+                    htmlAdmin += '<p style="text-align: center; margin-top: 20px;">Nenhum investimento encontrado no sistema.</p>';
+                }
+                div.innerHTML = htmlAdmin;
+                console.log('✅ Todos os Investimentos (Admin) carregados da API:', investimentos.length, 'itens');
+
+            } else {
+                const errorText = response ? await response.text() : 'Erro desconhecido';
+                console.error('Erro ao carregar todos investimentos:', response?.status, errorText);
+                div.innerHTML = `<div class="alert alert-error">Erro ao carregar investimentos: ${errorText} (Status: ${response?.status})</div>`;
+            }
+        } catch (error) {
+            console.error('Erro de conexão ao carregar todos investimentos:', error);
+            div.innerHTML = `<div class="alert alert-error">Erro de conexão ao buscar investimentos: ${error.message}</div>`;
+        }
+    }
 
 
-                 let defaultTab = 'meus-investimentos';
-                 document.getElementById('tab-todos').classList.add('hidden');
-                 document.getElementById('tab-usuarios').classList.add('hidden');
-                 // document.getElementById('tab-bancos').classList.add('hidden'); // Removido
+    // --- Listar Usuários (ADMIN) ---
+    async function loadUsuariosCRUD() {
+        console.log('🚀 Carregando Lista de Usuários (Admin) da API...');
+        const div = document.getElementById('usuarios');
+        div.innerHTML = '<div class="loading-message">Carregando dados reais dos usuários...</div>';
 
-                 if (role === 'ADMIN') {
-                     document.getElementById('admin-panel').classList.remove('hidden');
-                     document.getElementById('users-stat').classList.remove('hidden');
-                     document.getElementById('tab-todos').classList.remove('hidden');
-                     document.getElementById('tab-usuarios').classList.remove('hidden');
-                     // document.getElementById('tab-bancos').classList.remove('hidden'); // Removido
-                     defaultTab = 'todos-investimentos';
-                 }
+        try {
+            // AJUSTE O ENDPOINT SE NECESSÁRIO!
+            const response = await authenticatedFetch('/api/auth/users'); // Ou endpoint correto
 
-                 showSection('main-app');
-                 await loadBasicStats(); // Espera carregar stats
-                 showTab(defaultTab); // Mostra a aba correta
-             } else {
-                 logout();
-             }
-         }
+            if (response && response.ok) {
+                const users = await response.json();
+
+                let htmlUsers = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>👥 Lista de Usuários (Admin)</h3>
+                            </div>
+                    `;
+
+                if (users && users.length > 0) {
+                    htmlUsers += `
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Nome</th>
+                                        <th>Email</th>
+                                        <th>Papel</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+                    users.forEach(user => {
+                        const userRole = user.role || (user.roles && user.roles.length > 0 ? user.roles[0].nome || 'USER' : 'USER');
+                        const userJsonString = JSON.stringify(user).replace(/"/g, '&quot;');
+
+                        htmlUsers += `
+                                <tr>
+                                    <td><strong>#${user.id}</strong></td>
+                                    <td><strong>${user.username || 'N/A'}</strong></td>
+                                    <td>${user.nome || 'N/A'}</td> <td>${user.email || 'N/A'}</td> <td><span style="background: ${userRole === 'ADMIN' ? '#dc3545' : '#198754'}; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em;"><strong>${userRole}</strong></span></td>
+                                    <td>
+                                        <button class="btn" onclick='openModal("modal-usuario", ${userJsonString})' title="Ver detalhes do usuário">👁️ Ver Detalhes</button>
+                                        </td>
+                                </tr>
+                            `;
+                    });
+                    htmlUsers += '</tbody></table>';
+                } else {
+                    htmlUsers += '<p style="text-align: center; margin-top: 20px;">Nenhum usuário encontrado no sistema.</p>';
+                }
+                div.innerHTML = htmlUsers;
+                console.log('✅ Lista de Usuários carregada da API:', users.length, 'usuários');
+
+            } else {
+                const errorText = response ? await response.text() : 'Erro desconhecido';
+                console.error('Erro ao carregar usuários:', response?.status, errorText);
+                div.innerHTML = `<div class="alert alert-error">Erro ao carregar usuários: ${errorText} (Status: ${response?.status})</div>`;
+            }
+        } catch (error) {
+            console.error('Erro de conexão ao carregar usuários:', error);
+            div.innerHTML = `<div class="alert alert-error">Erro de conexão ao buscar usuários: ${error.message}</div>`;
+        }
+    }
+
+
+    // --- Ações dos Formulários de Modal ---
+    // Editar investimento agora recebe o objeto completo
+    function editarInvestimento(investimentoData) {
+        openModal('modal-investimento', investimentoData);
+    }
+
+    // Salvar Investimento (Criar/Editar)
+    document.getElementById('form-investimento').onsubmit = async function(e) {
+        e.preventDefault();
+        clearMessages('investimento-modal-error');
+
+        const id = document.getElementById('inv-id').value;
+        const isEditing = !!id; // Verifica se é edição (se tem ID)
+
+        const formData = {
+            nomeInvestimento: document.getElementById('inv-produto').value.trim(),
+            tipoInvestimento: document.getElementById('inv-categoria').value,
+            montanteInicial: parseFloat(document.getElementById('inv-valor').value) || 0,
+            dataInvestimento: document.getElementById('inv-data').value,
+            nomeBanco: document.getElementById('inv-banco').value.trim() || null, // Envia null se vazio
+            valorInicialAcao: parseFloat(document.getElementById('inv-valor-acao').value) || 0,
+            taxaRentabilidade: parseFloat(document.getElementById('inv-taxa').value) || 0,
+            numeroAcoesInicial: parseInt(document.getElementById('inv-num-acoes').value) || 0
+        };
+
+        // Validação
+        if (!formData.nomeInvestimento || !formData.tipoInvestimento || formData.montanteInicial <= 0 || !formData.dataInvestimento) {
+            showError('investimento-modal-error', 'Preencha Nome, Categoria, Valor (>0) e Data.');
+            return;
+        }
+
+        const url = isEditing ? `/api/investimentos/${id}` : '/api/investimentos/individual';
+        const method = isEditing ? 'PUT' : 'POST';
+
+        try {
+            const response = await authenticatedFetch(url, {
+                method: method,
+                body: JSON.stringify(formData)
+            });
+
+            if (response && response.ok) {
+                closeModal('modal-investimento');
+                alert(`✅ Investimento ${isEditing ? 'atualizado' : 'criado'} com sucesso!`);
+                // Recarrega a aba correta
+                const activeTabId = document.querySelector('.tab-buttons .btn-active')?.id?.replace('tab-', '') || 'meus-investimentos';
+                showTab(activeTabId);
+            } else {
+                const errorText = response ? await response.text() : 'Erro desconhecido';
+                showError('investimento-modal-error', `Erro ao salvar: ${errorText} (Status: ${response?.status})`);
+            }
+        } catch (error) {
+            console.error('Erro ao salvar investimento:', error);
+            showError('investimento-modal-error', 'Erro de conexão ao salvar.');
+        }
+    };
+
+    // Criar Novo Usuário Investidor (Admin)
+    document.getElementById('form-novo-usuario').onsubmit = async function(e) {
+        e.preventDefault();
+        clearMessages('novo-usuario-error');
+
+        const cpf = document.getElementById('novo-cpf').value.replace(/\D/g, ''); // Remove formatação
+
+        if (cpf.length !== 11) {
+            showError('novo-usuario-error', 'CPF deve ter 11 dígitos.');
+            return;
+        }
+
+        // Opcional: Pegar nome e email se você quiser enviar para /api/usuario-investimentos
+        // const nome = document.getElementById('novo-nome').value.trim();
+        // const email = document.getElementById('novo-email').value.trim();
+
+        try {
+            // AJUSTE O ENDPOINT E O BODY CONFORME SUA API ESPERA!
+            // Assumindo que o endpoint /api/usuario-investimentos cria apenas com CPF
+            const response = await authenticatedFetch('/api/usuario-investimentos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cpfIdentificacao: cpf
+                    // Inclua nome, email aqui se o seu backend os aceitar
+                })
+            });
+
+            if (response && response.ok) {
+                closeModal('modal-novo-usuario');
+                alert('✅ Registro do investidor (CPF) criado com sucesso! Lembre-se de criar o login separadamente se necessário.');
+                // Recarregar aba de usuários se estiver ativa
+                const activeTab = document.querySelector('.tab-buttons .btn-active')?.id?.replace('tab-', '');
+                if (activeTab === 'usuarios') {
+                    loadUsuariosCRUD();
+                }
+            } else {
+                const errorText = response ? await response.text() : 'Erro desconhecido';
+                showError('novo-usuario-error', `Erro ao criar investidor: ${errorText}`);
+            }
+        } catch (error) {
+            console.error("Erro ao criar investidor:", error);
+            showError('novo-usuario-error', `Erro de conexão: ${error.message}`);
+        }
+    };
+
+
+    // --- Funções de Exclusão ---
+    async function deleteInvestimento(id) {
+        if (!id) return; // Segurança extra
+        if (confirm(`Tem certeza que deseja excluir o investimento ID: ${id}?`)) {
+            try {
+                // AJUSTE O ENDPOINT SE NECESSÁRIO!
+                const response = await authenticatedFetch(`/api/investimentos/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response && response.ok) {
+                    alert('Investimento excluído com sucesso!');
+                    // Recarrega a aba atual
+                    const activeTabId = document.querySelector('.tab-buttons .btn-active')?.id?.replace('tab-', '') || 'meus-investimentos';
+                    showTab(activeTabId);
+                } else {
+                    const errorText = response ? await response.text() : 'Erro desconhecido';
+                    alert(`Erro ao excluir: ${errorText} (Status: ${response?.status})`);
+                }
+            } catch (error) {
+                console.error('Erro ao excluir investimento:', error);
+                alert('Erro de conexão ao excluir.');
+            }
+        }
+    }
+    // Excluir Usuário (Admin - placeholder, endpoint não existe no exemplo)
+    function deleteUser(id, username) {
+        alert(`Funcionalidade de excluir usuário (ID: ${id}, Username: ${username}) não implementada no backend.`);
+        console.warn(`Tentativa de excluir usuário ${id}, mas o endpoint DELETE /api/auth/users/{id} (ou similar) não foi implementado.`);
+    }
+
+
+    // --- Funções Auxiliares Admin ---
+    function abrirModalNovoInvestimento() {
+        openModal('modal-investimento'); // Abre modal vazio
+    }
+    function abrirModalNovoUsuario() {
+        openModal('modal-novo-usuario'); // Abre modal vazio
+    }
+
+    // --- Formatação Automática (CPF, CEP) ---
+    // (Coloquei dentro do DOMContentLoaded para garantir que os elementos existem)
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('reg-cpf')?.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '').slice(0, 11); // Limita a 11 dígitos
+            e.target.value = value;
+        });
+        document.getElementById('novo-cpf')?.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            e.target.value = value.slice(0, 14); // Limita o tamanho formatado
+        });
+        document.getElementById('novo-cep')?.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            e.target.value = value.slice(0, 9); // Limita o tamanho formatado
+        });
 
         // --- Event Listeners de Formulários (Login, Registro) ---
-        document.getElementById('login-form').addEventListener('submit', async function(e) { /* ... (igual anterior) ... */ });
-        document.getElementById('register-form').addEventListener('submit', async function(e) { /* ... (igual anterior, usando POST /api/usuario-investimentos) ... */ });
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearMessages('login-error');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            try {
+                // AJUSTE O ENDPOINT DE LOGIN SE NECESSÁRIO!
+                const response = await fetch(API_BASE_URL + '/api/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username, password })
+                });
+                if (response.ok) {
+                    const authData = await response.json();
+                    localStorage.setItem('token', authData.token);
+                    localStorage.setItem('username', authData.username);
+                    localStorage.setItem('role', authData.role);
+                    localStorage.removeItem('cpf'); // Remove CPF antigo ao logar
+                    await initializeUser(); // Reinitialize com os novos dados
+                } else {
+                    const errorText = await response.text();
+                    showError('login-error', `Erro no login: Usuário ou senha inválidos.`);
+                    console.error("Login failed:", response.status, errorText);
+                }
+            } catch (error) {
+                console.error('Erro de rede no login:', error);
+                showError('login-error', 'Erro de conexão. Verifique se o servidor está rodando.');
+            }
+        });
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearMessages('register-message');
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const nome = document.getElementById('reg-nome').value;
+            const email = document.getElementById('reg-email').value;
+            const cpf = document.getElementById('reg-cpf').value.replace(/\D/g, ''); // Pega CPF limpo
+
+            if (cpf.length !== 11) {
+                showError('register-message', 'CPF inválido. Digite 11 números.');
+                return;
+            }
+
+            try {
+                // 1. Cria o login/senha
+                // AJUSTE O ENDPOINT DE REGISTRO SE NECESSÁRIO!
+                const registerResponse = await fetch(API_BASE_URL + '/api/auth/register', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ username, password, nome, email: email || null, cpf }) // Agora envia CPF também
+                    });
+
+                if (registerResponse.ok) {
+                    showSuccess('register-message', 'Conta criada com sucesso! Você pode fazer login.');
+                    document.getElementById('register-form').reset();
+                    setTimeout(() => showSection('login-section'), 2000);
+                } else {
+                    const errorText = await registerResponse.text();
+                    showError('register-message', `Erro no cadastro: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('Erro de rede no registro:', error);
+                showError('register-message', 'Erro de conexão. Verifique o servidor.');
+            }
+        });
 
         // --- Listeners de Navegação ---
         document.getElementById('show-register').addEventListener('click', () => showSection('register-section'));
         document.getElementById('show-login').addEventListener('click', () => showSection('login-section'));
         document.getElementById('logout-btn').addEventListener('click', logout);
 
-        // --- Carregamento de Dados (Estatísticas e Abas) ---
-        async function loadBasicStats() { /* ... (igual anterior, usando GET /api/investimentos/meus) ... */ }
-        function showTab(tabId) { /* ... (igual anterior, removendo case 'bancos') ... */ }
-
-        // --- CRUD Meus Investimentos (USER) ---
-        async function loadMeusInvestimentos() { /* ... (igual anterior, usando GET /api/investimentos/meus) ... */ }
-
-        // --- CRUD Todos Investimentos (ADMIN) ---
-        async function loadTodosInvestimentos() { /* ... (igual anterior, usando GET /api/investimentos) ... */ }
-
-        // --- Listar Usuários (ADMIN - View Only) ---
-       async function loadUsuariosCRUD() {
-            const div = document.getElementById('usuarios');
-             // Simplificado: Apenas lista, sem botão de adicionar
-             div.innerHTML = '<h3>Lista de Usuários (Admin - Visualização)</h3>';
-            div.innerHTML += '<div id="users-table-area"><div class="loading-message">Carregando usuários...</div></div>';
-
-             try {
-                const tableArea = document.getElementById('users-table-area');
-                const response = await authenticatedFetch('/api/auth/users'); // Endpoint correto
-
-                if (response && response.ok) {
-                    const users = await response.json();
-                    if (!users || users.length === 0) {
-                         tableArea.innerHTML = '<p>Nenhum usuário encontrado no sistema.</p>';
-                         return;
-                    }
-
-                    let html = '<table><thead><tr><th>ID</th><th>Username</th><th>Nome</th><th>Email</th><th>Papel</th><th>Ações</th></tr></thead><tbody>';
-                    users.forEach(user => {
-                        const userJsonString = JSON.stringify(user).replace(/"/g, '&quot;');
-                        html += '<tr>';
-                        html += `<td>${user.id}</td>`;
-                        html += `<td>${user.username}</td>`;
-                        html += `<td>${user.nome || '-'}</td>`;
-                        html += `<td>${user.email || '-'}</td>`;
-                        html += `<td><strong style="color:${user.role === 'ADMIN' ? '#dc3545' : '#198754'}">${user.role}</strong></td>`;
-                        html += '<td>';
-                        // Botão apenas para ver detalhes, sem editar/excluir
-                        html += `<button class="btn" onclick='openModal("modal-usuario", ${userJsonString})'>Ver Detalhes</button>`;
-                        html += '</td></tr>';
-                    });
-                    html += '</tbody></table>';
-                    tableArea.innerHTML = html;
-                } else {
-                    const errorText = response ? `Erro ${response.status}: ${await response.text()}` : "Erro desconhecido";
-                    tableArea.innerHTML = `<div class="alert alert-error">Erro ao carregar usuários. ${errorText}</div>`;
-                }
-             } catch (error) {
-                 console.error("Erro em loadUsuariosCRUD:", error);
-                 document.getElementById('users-table-area').innerHTML = `<div class="alert alert-error">Erro ao carregar usuários: ${error.message || 'Verifique a conexão'}</div>`;
-             }
-        }
-
-
-        // --- CRUD Bancos foi removido ---
-        // async function loadBancosCRUD() { ... } // Removida
-
-
-        // --- Ações dos Formulários de Modal ---
-
-        // Salvar Investimento (Criar/Editar)
-        document.getElementById('form-investimento').onsubmit = async function(e) {
-             e.preventDefault();
-             clearMessages('investimento-modal-error');
-             const id = document.getElementById('inv-id').value;
-             const cpfUsuarioPost = document.getElementById('inv-cpf-usuario-post').value; // Para POST
-
-             // Corpo para PUT (editar) - direto InvestimentoDTO
-             const putBody = {
-                 id: id ? parseInt(id) : undefined,
-                 nomeInvestimento: document.getElementById('inv-produto').value,
-                 tipoInvestimento: document.getElementById('inv-categoria').value,
-                 montanteInicial: parseFloat(document.getElementById('inv-valor').value) || 0,
-                 dataInvestimento: document.getElementById('inv-data').value, // Formato YYYY-MM-DD
-                 nomeBanco: document.getElementById('inv-banco').value || null, // null se vazio
-                 valorInicialAcao: parseFloat(document.getElementById('inv-valor-acao').value) || 0,
-                 taxaRentabilidade: parseFloat(document.getElementById('inv-taxa').value) || 0,
-                 numeroAcoesInicial: parseInt(document.getElementById('inv-num-acoes').value) || 0
-             };
-
-             // Corpo para POST (criar) - dentro de UsuarioInvestimentoDTO
-             const postBodyWrapper = {
-                 cpfIdentificacao: cpfUsuarioPost,
-                 // dataUsuarioInvestimentos é o array esperado, mas o endpoint POST /api/investimentos parece esperar UsuarioInvestimentoDTO
-                 // Vamos ajustar para enviar UsuarioInvestimentoDTO com a lista
-                  dataUsuarioInvestimentos: [{...putBody, id: undefined }] // Usa os dados do formulário, sem ID
-             };
-
-
-            const url = id ? `/api/investimentos/${id}` : '/api/investimentos';
-            const method = id ? 'PUT' : 'POST';
-             // POST usa o Wrapper DTO, PUT usa o DTO direto
-            const bodyToSend = method === 'POST' ? postBodyWrapper : putBody;
-
-             // Validação básica no frontend
-             if (method === 'POST' && !bodyToSend.cpfIdentificacao) {
-                 showError('investimento-modal-error', 'Erro: CPF do usuário não identificado. Não é possível criar o investimento.');
-                 return;
-             }
-             if (!bodyToSend.dataUsuarioInvestimentos[0].nomeInvestimento || !bodyToSend.dataUsuarioInvestimentos[0].tipoInvestimento || bodyToSend.dataUsuarioInvestimentos[0].montanteInicial <= 0 || !bodyToSend.dataUsuarioInvestimentos[0].dataInvestimento ) {
-                 showError('investimento-modal-error', 'Erro: Preencha todos os campos obrigatórios (Produto, Categoria, Valor > 0, Data).');
-                 return;
-             }
-
-
-            console.log(`Enviando ${method} para ${url} com body:`, bodyToSend);
-
-            try {
-                // O endpoint POST /api/investimentos espera UsuarioInvestimentoDTO
-                 const response = await authenticatedFetch(url, { method, body: JSON.stringify(bodyToSend) });
-
-                if (response && response.ok) {
-                    closeModal('modal-investimento');
-                    await loadBasicStats();
-                    const activeTabId = document.querySelector('.tab-buttons .btn-active')?.id?.replace('tab-', '') || (currentUser.role === 'ADMIN' ? 'todos-investimentos' : 'meus-investimentos');
-                    showTab(activeTabId);
-                } else {
-                     const errorText = response ? await response.text() : "Erro desconhecido";
-                    console.error(`Erro ao salvar investimento (${response?.status}):`, errorText);
-                    showError('investimento-modal-error', `Erro ao salvar: ${errorText}`);
-                }
-             } catch (error) {
-                 console.error("Erro na requisição de salvar investimento:", error);
-                 showError('investimento-modal-error', `Erro na requisição: ${error.message || 'Verifique a conexão'}`);
-             }
-        };
-
-
-        // Salvar Usuário (Admin - Criar via /api/auth/register)
-        document.getElementById('form-usuario').onsubmit = async function(e) {
-            e.preventDefault();
-             clearMessages('usuario-modal-error');
-             const id = document.getElementById('user-id').value; // Usado para saber se é edição (não suportada) ou criação
-
-             if (id) {
-                 showError('usuario-modal-error', 'A edição de usuários não está implementada no backend.');
-                 return;
-             }
-
-             // Lógica apenas para CRIAR via /api/auth/register
-             const password = document.getElementById('user-password').value;
-             const body = {
-                 username: document.getElementById('user-username').value,
-                 nome: document.getElementById('user-nome').value,
-                 email: document.getElementById('user-email').value || null,
-                 role: document.getElementById('user-role').value, // Admin pode definir role
-                 password: password
-             };
-
-             if (!password || password.length < 6) {
-                  showError('usuario-modal-error', 'Senha é obrigatória e deve ter no mínimo 6 caracteres.');
-                  return;
-             }
-
-             const url = '/api/auth/register';
-             const method = 'POST';
-
-             console.log(`Enviando ${method} para ${url} com body:`, body);
-
-             try {
-                const response = await authenticatedFetch(url, {method, body: JSON.stringify(body)}); // Admin precisa estar autenticado para registrar? Verifique SecurityConfig
-                 // Nota: O endpoint /api/auth/register está configurado como permitAll no SecurityConfig, então a chamada não precisa ser autenticada.
-                 // Vamos usar fetch normal para este caso específico.
-                 /*
-                 const response = await fetch(API_BASE_URL + url, {
-                      method: 'POST',
-                      headers: {'Content-Type': 'application/json'},
-                      body: JSON.stringify(body)
-                 });
-                 */
-
-                if (response && response.ok) {
-                    closeModal('modal-usuario');
-                    await loadBasicStats(); // Recarrega contagem de usuários
-                    showTab('usuarios'); // Recarrega a tabela de usuários
-                    showSuccess('register-message', 'Novo usuário criado com sucesso pelo Admin!'); // Mostra msg na área principal
-                    setTimeout(() => clearMessages('register-message'), 4000);
-                } else {
-                     const errorText = response ? await response.text() : "Erro desconhecido";
-                     console.error(`Erro ao criar usuário (${response?.status}):`, errorText);
-                    showError('usuario-modal-error', `Erro ao criar usuário: ${errorText}`);
-                }
-             } catch (error) {
-                 console.error("Erro na requisição de criar usuário:", error);
-                 showError('usuario-modal-error', `Erro na requisição: ${error.message || 'Verifique a conexão'}`);
-             }
-        };
-
-
-        // Salvar Banco foi removido
-        // document.getElementById('form-banco').onsubmit = ... // Removido
-
-
-        // --- Funções de Exclusão ---
-        async function deleteInvestimento(id) { /* ... (igual anterior, usando DELETE /api/investimentos/{id}) ... */ }
-
-        // Excluir Usuário (Admin - funcionalidade removida pois endpoint não existe)
-         function deleteUser(id, username) {
-             alert(`Funcionalidade de excluir usuário (ID: ${id}, Username: ${username}) não implementada no backend.`);
-             console.warn(`Tentativa de excluir usuário ${id}, mas o endpoint DELETE /api/auth/users/{id} não existe.`);
-         }
-
-        // Excluir Banco foi removido
-        // async function deleteBanco(id) { ... } // Removida
-
-
         // --- Inicialização ---
-        document.addEventListener('DOMContentLoaded', initializeUser);
-    </script>
+        initializeUser(); // Chama a inicialização aqui, após definir os listeners
+    });
+
+</script>
 </body>
 </html>

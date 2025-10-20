@@ -4,6 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+
+/**
+ * DTO para requisição de autenticação (login) de usuário.
+ *
+ * Contém os campos necessários para autenticação: username e password.
+ */
 public class AuthRequest {
     
     @NotBlank(message = "Username é obrigatório")
@@ -16,25 +22,56 @@ public class AuthRequest {
     @Schema(description = "Senha do usuário", example = "minhasenha123")
     private String password;
 
+
+    /**
+     * Construtor padrão.
+     */
     public AuthRequest() {}
 
+
+    /**
+     * Construtor com todos os campos.
+     *
+     * param username nome de usuário
+     * param password senha do usuário
+     */
     public AuthRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
+
+    /**
+     * Obtém o nome de usuário.
+     * return username
+     */
     public String getUsername() {
         return username;
     }
 
+
+    /**
+     * Define o nome de usuário.
+     * param username nome de usuário
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+
+    /**
+     * Obtém a senha do usuário.
+     * return password
+     */
     public String getPassword() {
         return password;
     }
 
+
+    /**
+     * Define a senha do usuário.
+     * param password senha do usuário
+     */
     public void setPassword(String password) {
         this.password = password;
     }

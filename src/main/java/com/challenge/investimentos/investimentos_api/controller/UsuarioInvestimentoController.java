@@ -3,7 +3,6 @@ package com.challenge.investimentos.investimentos_api.controller;
 import com.challenge.investimentos.investimentos_api.dto.UsuarioInvestimentoDTO;
 import com.challenge.investimentos.investimentos_api.model.UsuarioInvestimento;
 import com.challenge.investimentos.investimentos_api.service.interfaces.IUsuarioInvestimentoService;
-import com.challenge.investimentos.investimentos_api.dto.UsuarioCadastroDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,8 +33,8 @@ public class UsuarioInvestimentoController {
      * Salva ou atualiza todos os investimentos associados a um usuário investidor.
      * Essa operação sobrescreve os investimentos existentes do usuário.
      *
-     * @param dto DTO contendo o CPF do usuário e a lista de investimentos
-     * @return ResponseEntity com mensagem de sucesso ou erro
+     * param dto DTO contendo o CPF do usuário e a lista de investimentos
+     * return ResponseEntity com mensagem de sucesso ou erro
      */
     @PutMapping
     @Operation(
@@ -54,7 +53,7 @@ public class UsuarioInvestimentoController {
     /**
      * Lista todos os usuários investidores cadastrados.
      *
-     * @return ResponseEntity com a lista de usuários investidores
+     * return ResponseEntity com a lista de usuários investidores
      */
     @GetMapping
     @Operation(
@@ -75,8 +74,8 @@ public class UsuarioInvestimentoController {
     /**
      * Busca um usuário investidor pelo CPF informado.
      *
-     * @param cpf CPF do usuário investidor
-     * @return ResponseEntity com o usuário encontrado ou mensagem de erro
+     * param cpf CPF do usuário investidor
+     * return ResponseEntity com o usuário encontrado ou mensagem de erro
      */
     @GetMapping("/{cpf}")
     @Operation(
@@ -101,26 +100,12 @@ public class UsuarioInvestimentoController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Cria um novo usuário investidor com os dados fornecidos (apenas CPF).
-     *
-     * @param dto DTO contendo o CPF do novo usuário investidor
-     * @return ResponseEntity com mensagem de sucesso ou erro
-     */
-    @PostMapping
-    @Operation(
-        summary = "Criar novo usuário investidor",
-        description = "Cria um novo usuário investidor com os dados fornecidos (apenas CPF)"
-    )
-    public ResponseEntity<String> criarUsuarioInvestimento(@Valid @RequestBody UsuarioCadastroDTO dto) {
-        return service.criarUsuarioInvestimento(dto.getCpfIdentificacao());
-    }
 
     /**
      * Deleta um usuário investidor identificado pelo CPF informado.
      *
-     * @param cpf CPF do usuário investidor a ser deletado
-     * @return ResponseEntity com mensagem de sucesso ou erro
+     * param cpf CPF do usuário investidor a ser deletado
+     * return ResponseEntity com mensagem de sucesso ou erro
      */
     @DeleteMapping("/{cpf}")
     @Operation(

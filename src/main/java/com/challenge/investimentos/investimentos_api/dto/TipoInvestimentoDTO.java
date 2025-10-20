@@ -20,7 +20,7 @@ public class TipoInvestimentoDTO {
 
     /**
      * Construtor com parâmetro.
-     * @param tipoInvestimento tipo do investimento
+     * param tipoInvestimento tipo do investimento
      */
     public TipoInvestimentoDTO(String tipoInvestimento) {
         this.tipoInvestimento = tipoInvestimento;
@@ -28,7 +28,7 @@ public class TipoInvestimentoDTO {
 
     /**
      * Obtém o tipo de investimento.
-     * @return tipo de investimento
+     * return tipo de investimento
      */
     public String getTipoInvestimento() {
         return tipoInvestimento;
@@ -36,7 +36,7 @@ public class TipoInvestimentoDTO {
 
     /**
      * Define o tipo de investimento.
-     * @param tipoInvestimento tipo de investimento
+     * param tipoInvestimento tipo de investimento
      */
     public void setTipoInvestimento(String tipoInvestimento) {
         this.tipoInvestimento = tipoInvestimento;

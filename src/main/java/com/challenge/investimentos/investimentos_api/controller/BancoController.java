@@ -30,8 +30,8 @@ public class BancoController {
     /**
      * Lista os bancos associados ao CPF informado.
      *
-     * @param cpf CPF do usuário investidor
-    * @return Lista de nomes de bancos associados ao CPF
+     * param cpf CPF do usuário investidor
+     * return Lista de nomes de bancos associados ao CPF
      */
     @Operation(
         summary = "Lista bancos por CPF",

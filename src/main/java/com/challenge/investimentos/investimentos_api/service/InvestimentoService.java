@@ -51,8 +51,8 @@ public class InvestimentoService implements IInvestimentoService {
      * Valida se o CPF existe e se a lista de investimentos foi enviada, converte
      * os dados do DTO para entidades e salva em lote.
      *
-     * @param dto dados do usuário e seus investimentos
-     * @return 200 em caso de sucesso; 400 quando houver validação inválida
+     * param dto dados do usuário e seus investimentos
+     * return 200 em caso de sucesso; 400 quando houver validação inválida
      */
     @Transactional
     public ResponseEntity<String> salvarInvestimentos(UsuarioInvestimentoDTO dto) {

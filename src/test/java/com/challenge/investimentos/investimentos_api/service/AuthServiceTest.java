@@ -30,6 +30,8 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
+    @Mock
+    private com.challenge.investimentos.investimentos_api.repository.UsuarioInvestimentoRepository usuarioInvestimentoRepository;
 
     @Mock
     private UsuarioRepository usuarioRepository;
@@ -50,7 +52,7 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        authService = new AuthService(usuarioRepository, passwordEncoder, authenticationManager, jwtTokenProvider);
+    authService = new AuthService(usuarioRepository, passwordEncoder, authenticationManager, jwtTokenProvider, usuarioInvestimentoRepository);
     }
 
     @Test

@@ -16,6 +16,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 
+
+/**
+ * Controller responsável pelos endpoints de autenticação e registro de usuários.
+ *
+ * Fornece operações para registro, login (JWT) e listagem de usuários (admin).
+ */
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Autenticação", description = "Endpoints para registro e login de usuários")
@@ -23,11 +29,24 @@ public class AuthController {
 
     private final AuthService authService;
 
+
+    /**
+     * Construtor para injeção do serviço de autenticação.
+     *
+     * param authService serviço de autenticação
+     */
     @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
+
+    /**
+     * Endpoint para registrar um novo usuário no sistema.
+     *
+     * param req dados do usuário a ser registrado
+     * return 200 se criado, 400 se já existe ou dados inválidos, 500 para erro interno
+     */
     @PostMapping("/register")
     @Operation(
         summary = "Registrar novo usuário",
@@ -48,6 +67,13 @@ public class AuthController {
         }
     }
 
+
+    /**
+     * Endpoint para autenticação de usuário (login).
+     *
+     * param req dados de autenticação (username e senha)
+     * return 200 com token JWT, 401 se credenciais inválidas
+     */
     @PostMapping("/login")
     @Operation(
         summary = "Fazer login",
@@ -66,6 +92,12 @@ public class AuthController {
         }
     }
 
+
+    /**
+     * Endpoint para listar todos os usuários do sistema (apenas para administradores).
+     *
+     * return 200 com lista de usuários, 403 se acesso negado, 500 para erro interno
+     */
     @GetMapping("/users")
     @Operation(
         summary = "Listar todos os usuários (Apenas Admin)",
@@ -83,17 +115,4 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/debug/check-admin")
-    public ResponseEntity<?> checkAdminPassword() {
-        try {
-            Usuario admin = authService.findByUsername("admin");
-            if (admin == null) {
-                return ResponseEntity.ok("admin user not found");
-            }
-            boolean matches = authService.validatePassword("admin123", admin.getPassword());
-            return ResponseEntity.ok(matches ? "admin password matches (admin123)" : "admin password DOES NOT match (admin123)");
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error checking admin: " + e.getMessage());
-        }
-    }
 }

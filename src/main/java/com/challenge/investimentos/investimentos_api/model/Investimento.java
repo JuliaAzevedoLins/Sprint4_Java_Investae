@@ -118,6 +118,7 @@ public class Investimento implements Serializable {
         this.numeroAcoesInicial = numeroAcoesInicial;
     }
 
+    /** Obtém o tipo de investimento. */
     public TipoInvestimentoEnum getTipoInvestimento() {
         return tipoInvestimento;
     }

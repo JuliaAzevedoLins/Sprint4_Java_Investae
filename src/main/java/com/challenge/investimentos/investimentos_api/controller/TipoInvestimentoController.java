@@ -31,8 +31,8 @@ public class TipoInvestimentoController {
     /**
      * Lista os tipos de investimento associados ao CPF informado.
      *
-     * @param cpf CPF do usuário investidor
-     * @return Lista de tipos de investimento associados ao CPF
+     * param cpf CPF do usuário investidor
+     * return Lista de tipos de investimento associados ao CPF
      */
     @Operation(
         summary = "Lista tipos de investimento por CPF",

@@ -27,6 +27,7 @@ public class AuthService implements com.challenge.investimentos.investimentos_ap
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final com.challenge.investimentos.investimentos_api.repository.UsuarioInvestimentoRepository usuarioInvestimentoRepository;
 
     /**
      * Construtor para injeção de dependências.
@@ -34,11 +35,13 @@ public class AuthService implements com.challenge.investimentos.investimentos_ap
     public AuthService(UsuarioRepository usuarioRepository, 
                       PasswordEncoder passwordEncoder,
                       AuthenticationManager authenticationManager,
-                      JwtTokenProvider jwtTokenProvider) {
+                      JwtTokenProvider jwtTokenProvider,
+                      com.challenge.investimentos.investimentos_api.repository.UsuarioInvestimentoRepository usuarioInvestimentoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.usuarioInvestimentoRepository = usuarioInvestimentoRepository;
     }
 
     /**
@@ -60,15 +63,32 @@ public class AuthService implements com.challenge.investimentos.investimentos_ap
             }
         }
 
-        // Cria novo usuário
-        Usuario usuario = new Usuario();
-        usuario.setUsername(request.getUsername());
-        usuario.setPassword(passwordEncoder.encode(request.getPassword()));
-        usuario.setNome(request.getNome());
-        usuario.setEmail(request.getEmail());
-        usuario.setRole(request.getRole() != null ? request.getRole() : RoleEnum.USER);
+        // Verifica se CPF já existe
+        if (usuarioRepository.findByCpf(request.getCpf()) != null) {
+            throw new IllegalArgumentException("CPF já cadastrado");
+        }
 
-        return usuarioRepository.save(usuario);
+    // Cria novo usuário
+    Usuario usuario = new Usuario();
+    usuario.setUsername(request.getUsername());
+    usuario.setPassword(passwordEncoder.encode(request.getPassword()));
+    usuario.setNome(request.getNome());
+    usuario.setEmail(request.getEmail());
+    usuario.setCpf(request.getCpf());
+    usuario.setRole(request.getRole() != null ? request.getRole() : RoleEnum.USER);
+
+    Usuario savedUser = usuarioRepository.save(usuario);
+
+    // Cria automaticamente o registro de USUARIO_INVESTIMENTO com o mesmo CPF
+    // Só cria se ainda não existir
+    // Repositório precisa ser injetado
+    if (usuarioInvestimentoRepository.findByCpf_Cpf(request.getCpf()) == null) {
+        com.challenge.investimentos.investimentos_api.model.UsuarioInvestimento investidor = new com.challenge.investimentos.investimentos_api.model.UsuarioInvestimento();
+        investidor.setCpfIdentificacao(request.getCpf());
+        usuarioInvestimentoRepository.save(investidor);
+    }
+
+    return savedUser;
     }
 
     /**
@@ -122,5 +142,14 @@ public class AuthService implements com.challenge.investimentos.investimentos_ap
      */
     public java.util.List<Usuario> getAllUsers() {
         return usuarioRepository.findAll();
+    }
+
+    /**
+     * Salva um usuário no banco de dados.
+     * @param usuario Usuario a ser salvo
+     * @return Usuario salvo
+     */
+    public Usuario saveUser(Usuario usuario) {
+        return usuarioRepository.save(usuario);
     }
 }

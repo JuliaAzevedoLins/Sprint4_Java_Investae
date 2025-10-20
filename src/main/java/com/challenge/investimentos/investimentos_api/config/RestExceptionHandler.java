@@ -25,8 +25,8 @@ public class RestExceptionHandler {
      * Captura problemas como: enums inválidos, formatos de data incorretos,
      * valores numéricos mal formatados e outros erros de conversão.
      *
-     * @param ex exceção de leitura/conversão do corpo da requisição
-     * @return ResponseEntity com mensagem de erro específica e status 400 (Bad Request)
+     * param ex exceção de leitura/conversão do corpo da requisição
+     * return ResponseEntity com mensagem de erro específica e status 400 (Bad Request)
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleEnumException(HttpMessageNotReadableException ex) {
@@ -62,8 +62,8 @@ public class RestExceptionHandler {
     /**
      * Trata erros de parsing de datas inválidas.
      *
-     * @param ex exceção de formatação de data
-     * @return ResponseEntity com mensagem de erro e status 400 (Bad Request)
+     * param ex exceção de formatação de data
+     * return ResponseEntity com mensagem de erro e status 400 (Bad Request)
      */
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<String> handleDateParseException(DateTimeParseException ex) {
@@ -78,8 +78,8 @@ public class RestExceptionHandler {
      * Processa anotações de validação (@NotNull, @Valid, etc.) e retorna
      * mensagens detalhadas para cada campo que falhou na validação.
      *
-     * @param ex exceção de validação de argumentos
-     * @return ResponseEntity com mensagens de erro por campo e status 400 (Bad Request)
+     * param ex exceção de validação de argumentos
+     * return ResponseEntity com mensagens de erro por campo e status 400 (Bad Request)
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
@@ -93,8 +93,8 @@ public class RestExceptionHandler {
     /**
      * Fallback para exceções não tratadas pelos outros handlers.
      *
-     * @param ex exceção genérica não capturada
-     * @return ResponseEntity com mensagem de erro e status 500 (Internal Server Error)
+     * param ex exceção genérica não capturada
+     * return ResponseEntity com mensagem de erro e status 500 (Internal Server Error)
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
