@@ -8,6 +8,24 @@ Um app que centraliza seus investimentos, te orienta e torna tudo simples, visua
 
 ---
 
+## 🆕 Novidades e Funcionalidades Recentes
+- Autenticação de usuários implementada.
+- Restrição de acesso ao Swagger apenas para o administrador.
+- Cadastro e login de usuários investidores.
+- Novos endpoints para consulta, cadastro, atualização e autenticação de usuários.
+- Interface web aprimorada para testes e visualização dos dados.
+- Melhorias na segurança das rotas e tratamento de erros.
+
+### Credenciais de acesso
+- **Administrador (acesso ao Swagger):**
+  - Usuário: `admin`
+  - Senha: `admin123`
+- **Usuário de teste:**
+  - Usuário: `julia`
+  - Senha: `julia123`
+
+---
+
 ## 📚 Sumário
 
 - [Sobre o Projeto](#sobre-o-projeto)
@@ -17,6 +35,7 @@ Um app que centraliza seus investimentos, te orienta e torna tudo simples, visua
 - [📁 Estrutura do Projeto](#estrutura-do-projeto)
 - [📝 Documentação da API (Swagger)](#documentação-da-api-swagger)
 - [🔗 Endpoints e Exemplos de Testes](#endpoints-e-exemplos-de-testes)
+  - [Autenticação](#autenticação)
   - [Usuários Investidores](#usuários-investidores)
   - [Investimentos](#investimentos)
   - [Bancos](#bancos)
@@ -35,7 +54,7 @@ O **Investaê** é uma API RESTful para cadastro de usuários investidores, seus
 O projeto segue boas práticas de arquitetura, separação de camadas, uso de DTOs, tratamento de erros e documentação automática.  
 Esta API está integrada ao nosso aplicativo mobile, proporcionando uma experiência centralizada e inteligente para o investidor.
 
-Repositório oficial: [https://github.com/JuliaAzevedoLins/ChallengeXP_Java](https://github.com/JuliaAzevedoLins/ChallengeXP_Java)
+Repositório oficial: [https://github.com/JuliaAzevedoLins/Sprint4_Java_Investae](https://github.com/JuliaAzevedoLins/Sprint4_Java_Investae)
 
 ---
 
@@ -58,6 +77,8 @@ Repositório oficial: [https://github.com/JuliaAzevedoLins/ChallengeXP_Java](htt
 - **Spring Data JPA** - Abstração para acesso a dados e mapeamento objeto-relacional
 - **Spring Web** - Desenvolvimento de APIs RESTful
 - **Spring Validation** - Validação de dados de entrada
+- **Spring Security** - Autenticação e autorização de usuários
+- **JWT (JSON Web Token)** - Gerenciamento de tokens de autenticação
 - **Oracle Database** - Banco de dados principal (pode ser adaptado para H2)
 - **Flyway** - Gerenciamento de migrações do banco de dados
 - **Swagger/OpenAPI 3** - Documentação automática da API
@@ -87,9 +108,8 @@ Repositório oficial: [https://github.com/JuliaAzevedoLins/ChallengeXP_Java](htt
    ```
 
 4. **Acesse a documentação Swagger e Interface Web:**
-   - [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
    - [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
-   - [http://localhost:8080/investimentos.html](http://localhost:8080/investimentos.html)
+   - [http://localhost:8080/investae-home.html](http://localhost:8080/investae-home.html)
 
 ---
 
@@ -97,54 +117,82 @@ Repositório oficial: [https://github.com/JuliaAzevedoLins/ChallengeXP_Java](htt
 
 ```
 src/
-  main/
-    java/
-      com/challenge/investimentos/investimentos_api/
-        controller/       # Controllers REST - Camada de apresentação
-          ├── BancoController.java
-          ├── InvestimentoController.java
-          ├── TipoInvestimentoController.java
-          └── UsuarioInvestimentoController.java
-        service/          # Lógica de negócio - Camada de serviço
-          ├── BancoService.java
-          ├── InvestimentoService.java
-          ├── TipoInvestimentoService.java
-          └── UsuarioInvestimentoService.java
-        repository/       # Repositórios JPA - Camada de dados
-          ├── InvestimentoRepository.java
-          └── UsuarioInvestimentoRepository.java
-        model/            # Entidades JPA - Modelos de dados
-          ├── Banco.java
-          ├── CpfVO.java (Value Object)
-          ├── Investimento.java
-          ├── RentabilidadeDiaria.java
-          └── UsuarioInvestimento.java
-        dto/              # Data Transfer Objects
-          ├── InvestimentoDTO.java
-          ├── RentabilidadeDiariaDTO.java
-          ├── TipoInvestimentoDTO.java
-          ├── UsuarioCadastroDTO.java
-          └── UsuarioInvestimentoDTO.java
-        enums/            # Enums de domínio
-          ├── BancoEnum.java
-          └── TipoInvestimentoEnum.java
-        config/           # Configurações da aplicação
-          ├── CorsConfig.java
-          ├── RestExceptionHandler.java
-          └── SwaggerConfig.java
-        InvestimentosApiApplication.java  # Classe principal
-    resources/
-      ├── application.properties        # Configurações da aplicação
-      ├── db/migration/                # Scripts de migração Flyway
-      │   └── V1__init.sql
-      └── static/                      # Arquivos estáticos (interface web)
-          ├── index.html
-          ├── investimentos.html
-          └── ...
-  test/
-    java/
-      com/challenge/investimentos/investimentos_api/
-        └── InvestimentosApiApplicationTests.java
+├── main/
+│   ├── java/
+│   │   └── com/
+│   │       └── challenge/
+│   │           └── investimentos/
+│   │               └── investimentos_api/
+│   │                   ├── config/
+│   │                   │   ├── CorsConfig.java
+│   │                   │   ├── RestExceptionHandler.java
+│   │                   │   ├── SecurityConfig.java
+│   │                   │   └── SwaggerConfig.java
+│   │                   ├── controller/
+│   │                   │   ├── AuthController.java
+│   │                   │   ├── BancoController.java
+│   │                   │   ├── InvestimentoController.java
+│   │                   │   ├── TipoInvestimentoController.java
+│   │                   │   └── UsuarioInvestimentoController.java
+│   │                   ├── dto/
+│   │                   │   ├── InvestimentoDTO.java
+│   │                   │   ├── RentabilidadeDiariaDTO.java
+│   │                   │   ├── TipoInvestimentoDTO.java
+│   │                   │   ├── UsuarioCadastroDTO.java
+│   │                   │   └── UsuarioInvestimentoDTO.java
+│   │                   ├── enums/
+│   │                   │   ├── BancoEnum.java
+│   │                   │   └── TipoInvestimentoEnum.java
+│   │                   ├── exception/
+│   │                   │   └── // ...exceções customizadas
+│   │                   ├── model/
+│   │                   │   ├── Banco.java
+│   │                   │   ├── CpfVO.java
+│   │                   │   ├── Investimento.java
+│   │                   │   ├── RentabilidadeDiaria.java
+│   │                   │   └── UsuarioInvestimento.java
+│   │                   ├── repository/
+│   │                   │   ├── InvestimentoRepository.java
+│   │                   │   └── UsuarioInvestimentoRepository.java
+│   │                   ├── security/
+│   │                   │   ├── JwtAuthenticationFilter.java
+│   │                   │   ├── JwtService.java
+│   │                   │   ├── UserDetailsServiceImpl.java
+│   │                   │   └── // ...outros arquivos de segurança
+│   │                   ├── service/
+│   │                   │   ├── BancoService.java
+│   │                   │   ├── InvestimentoService.java
+│   │                   │   ├── TipoInvestimentoService.java
+│   │                   │   ├── UsuarioInvestimentoService.java
+│   │                   │   └── interfaces/
+│   │                   │       └── // ...interfaces de serviço
+│   │                   └── InvestimentosApiApplication.java
+│   └── resources/
+│       ├── application.properties
+│       ├── application-oracle.properties
+│       ├── db/
+│       │   └── migration/
+│       │       ├── V1__init.sql
+│       │       ├── V2__create_usuario_table.sql
+│       │       ├── V3__add_data_investimento.sql
+│       │       ├── V4__insert_admin_user.sql
+│       │       └── V6__admin_cpf_dados_exemplo.sql
+│       └── static/
+│           ├── index.html
+│           └── investae-home.html
+├── test/
+│   ├── java/
+│   │   └── com/
+│   │       └── challenge/
+│   │           └── investimentos/
+│   │               └── investimentos_api/
+│   │                   ├── config/
+│   │                   ├── controller/
+│   │                   ├── integration/
+│   │                   ├── service/
+│   │                   └── InvestimentosApiApplicationTests.java
+│   └── resources/
+│       └── application-test.properties
 ```
 
 ---
@@ -153,6 +201,17 @@ src/
 
 Acesse a documentação interativa em:  
 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+> ⚠️ **Atenção:** O acesso ao Swagger está restrito apenas ao usuário administrador (`admin`). Utilize as credenciais acima para acessar.
+> Para testar o login de usuário comum, utilize as credenciais de teste acima.
+>
+> **Como liberar os endpoints no Swagger:**
+> 1. Acesse o endpoint de autenticação (`/api/auth/login`) e faça o login como admin.
+> 2. O token JWT será gerado na resposta.
+> 3. Copie o token e clique em "Authorize" no Swagger UI, colando o token no campo apropriado.
+> 4. Após autorizar, todos os endpoints protegidos estarão liberados para o admin.
+>
+> *No HTML de testes, a verificação é feita automaticamente no login, não sendo necessário inserir o token manualmente.*
 
 ### 🌐 Interface Web de Demonstração
 
@@ -219,6 +278,38 @@ Cada um segue o mesmo padrão de organização, com endpoints específicos para 
 ---
 
 ## 🔗 Endpoints e Exemplos de Testes
+
+### 🔑 Autenticação
+
+#### 🔒 Login
+- **POST** `/api/auth/login`
+- **Body:**
+  ```json
+  {
+    "username": "admin",
+    "password": "admin123"
+  }
+  ```
+- **Resposta:** `200 OK`
+  ```json
+  {
+    "token": "<JWT_TOKEN>"
+  }
+  ```
+
+#### 🔓 Registrar novo usuário
+- **POST** `/api/auth/register`
+- **Body:**
+  ```json
+  {
+    "username": "julia",
+    "password": "julia123"
+  }
+  ```
+- **Resposta:** `201 Created`
+  ```json
+  "Usuário registrado com sucesso."
+  ```
 
 ### 👤 Usuários Investidores
 
@@ -461,7 +552,7 @@ O projeto segue uma arquitetura em camadas bem definida, seguindo os princípios
 
 **Camadas da Aplicação:**
 - **Controller**: Responsável por receber requisições HTTP, validar dados de entrada e retornar respostas padronizadas
-- **Service**: Contém a lógica de negócio, regras de validação e coordenação entre diferentes repositórios
+- **Service**: Contém a lógica de negócio, regras de validação e coorderação entre diferentes repositórios
 - **Repository**: Interface de acesso aos dados, utilizando Spring Data JPA para abstrair operações com banco de dados
 - **Model**: Entidades JPA que representam as tabelas do banco de dados
 - **DTO**: Objetos de transferência de dados para comunicação entre camadas
@@ -487,6 +578,16 @@ O banco de dados é estruturado com relacionamentos bem definidos para garantir 
 
 ## ⚙️ Regras de Negócio
 
+- **Admin:**
+  - Visualiza todos os usuários, investimentos, bancos e tipos de investimento.
+  - Pode realizar CRUD completo em qualquer usuário ou investimento.
+  - Tem acesso total a todos os endpoints e funcionalidades da API.
+
+- **Usuário comum:**
+  - Visualiza apenas seus próprios dados e investimentos.
+  - Pode realizar CRUD completo apenas nos seus próprios investimentos e perfil.
+  - Não tem acesso aos dados de outros usuários.
+
 - **Centralização e Consulta:** O Investaê centraliza todos os investimentos do usuário, permitindo visualizar e gerenciar aplicações de diferentes bancos em um só lugar.
 - **Cadastro e Gerenciamento:** Apenas usuários investidores podem cadastrar, atualizar ou remover seus próprios investimentos.
 - **Rentabilidade Diária:** Cada investimento pode ter uma ou mais rentabilidades diárias associadas, permitindo o acompanhamento detalhado da evolução.
@@ -501,12 +602,20 @@ O banco de dados é estruturado com relacionamentos bem definidos para garantir 
 - **Campos obrigatórios:** Retorna `400 Bad Request` com mensagem clara.
 - **Enum inválido:** Retorna `400 Bad Request` e lista os valores permitidos.
 - **Usuário ou investimento não encontrado:** Retorna `404 Not Found`.
+- **Acesso negado:** Retorna `403 Forbidden` quando o usuário tenta acessar ou modificar dados que não tem permissão (exemplo: usuário comum tentando acessar dados de outro usuário ou endpoints restritos ao admin).
 - **Erro interno:** Retorna `500 Internal Server Error`.
 
 Exemplo de erro para enum inválido:
 ```json
 {
   "message": "Valor inválido para o campo TipoInvestimento. Valores permitidos: [RENDA_FIXA, RENDA_VARIAVEL, TESOURO_DIRETO, CRIPTOMOEDA, FUNDO_IMOBILIARIO, CDB, LCI, LCA, OUTRO]."
+}
+```
+
+Exemplo de erro para acesso negado:
+```json
+{
+  "message": "Acesso negado. Você não tem permissão para acessar este recurso."
 }
 ```
 
