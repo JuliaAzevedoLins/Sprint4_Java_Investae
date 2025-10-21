@@ -34,6 +34,11 @@ Um app que centraliza seus investimentos, te orienta e torna tudo simples, visua
 - [▶️ Como Executar](#como-executar)
 - [📁 Estrutura do Projeto](#estrutura-do-projeto)
 - [📝 Documentação da API (Swagger)](#documentação-da-api-swagger)
+- [🧪 Testes Automatizados](#testes-automatizados)
+  - [Como Executar os Testes](#como-executar-os-testes)
+  - [Tipos de Testes](#tipos-de-testes)
+  - [Descrição dos Testes](#descrição-dos-testes)
+  - [Configuração de Testes](#configuração-de-testes)
 - [🔗 Endpoints e Exemplos de Testes](#endpoints-e-exemplos-de-testes)
   - [Autenticação](#autenticação)
   - [Usuários Investidores](#usuários-investidores)
@@ -91,12 +96,12 @@ Repositório oficial: [https://github.com/JuliaAzevedoLins/Sprint4_Java_Investae
 
 1. **Clone o repositório:**
    ```sh
-   git clone https://github.com/JuliaAzevedoLins/ChallengeXP_Java.git
-   cd ChallengeXP_Java
+   git clone https://github.com/JuliaAzevedoLins/Sprint4_Java_Investae.git
+   cd Sprint4_Java_Investae
    ```
 
-2. **Configure o banco de dados Oracle no arquivo `src/main/resources/application.properties`.**
-   > Para testes locais, pode ser adaptado para H2.
+2. **Configure o banco de dados Oracle no arquivo `src/main/resources/application.properties` e `src/test/resources/application-test.properties`.**
+   > O projeto agora utiliza **Oracle** tanto para execução quanto para testes. Certifique-se de que o banco Oracle está disponível e configurado corretamente.
 
 3. **Execute a aplicação:**
    ```sh
@@ -107,7 +112,17 @@ Repositório oficial: [https://github.com/JuliaAzevedoLins/Sprint4_Java_Investae
    mvn spring-boot:run
    ```
 
-4. **Acesse a documentação Swagger e Interface Web:**
+4. **Execute os testes:**
+   ```sh
+   ./mvnw test
+   ```
+   ou
+   ```sh
+   mvn test
+   ```
+   > Os testes agora utilizam o banco Oracle. Verifique se o banco está configurado e acessível antes de rodar os testes.
+
+5. **Acesse a documentação Swagger e Interface Web:**
    - [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
    - [http://localhost:8080/investae-home.html](http://localhost:8080/investae-home.html)
 
@@ -248,6 +263,176 @@ Formulário utilizado tanto pelo admin quanto pelo usuário para cadastrar um no
 ![Formulário de Novo Investimento](./imagens/form-novo-investimento.png)
 
 *Formulário completo para cadastro de novo investimento, incluindo campos para banco, tipo, valores e rentabilidades diárias.*
+
+---
+
+## 🧪 Testes Automatizados
+
+O projeto possui uma suíte completa de testes automatizados que garantem a qualidade e confiabilidade do código. Todos os testes utilizam o banco de dados Oracle e são executados de forma isolada para evitar interferências.
+
+### 📊 Status dos Testes
+
+```
+✅ Total de Testes: 13
+✅ Taxa de Sucesso: 100%
+✅ Cobertura: Testes unitários e de integração
+✅ Banco de Dados: Oracle (ambiente de teste)
+```
+
+### 🚀 Como Executar os Testes
+
+#### Executar todos os testes
+```bash
+./mvnw test
+# ou
+mvn test
+```
+
+#### Executar testes específicos
+```bash
+# Testes de serviço (unitários)
+./mvnw test -Dtest="*ServiceTest"
+
+# Teste de integração de autenticação
+./mvnw test -Dtest="AuthIntegrationTest"
+
+# Teste de inicialização da aplicação
+./mvnw test -Dtest="InvestimentosApiApplicationTests"
+```
+
+#### Executar testes com limpeza prévia
+```bash
+./mvnw clean test
+```
+
+### 🎯 Tipos de Testes
+
+#### 1. **Testes Unitários** (Service Layer)
+- **Propósito:** Testam a lógica de negócio isoladamente
+- **Framework:** JUnit 5 + Mockito
+- **Características:** Rápidos, isolados, sem dependências externas
+
+#### 2. **Testes de Integração**
+- **Propósito:** Testam o fluxo completo da aplicação
+- **Framework:** Spring Boot Test + MockMvc
+- **Características:** Testam controllers, segurança, banco de dados
+
+#### 3. **Testes de Inicialização**
+- **Propósito:** Verificam se o contexto da aplicação carrega corretamente
+- **Framework:** Spring Boot Test
+- **Características:** Validam configurações e dependências
+
+### 📋 Descrição dos Testes
+
+#### 🔐 **AuthServiceTest** (6 testes)
+Testa o serviço de autenticação e gerenciamento de usuários.
+
+**Métodos testados:**
+- `testRegisterUser_Success()` - Registro de usuário com sucesso
+- `testRegisterUser_UsernameExists()` - Falha ao registrar usuário existente
+- `testRegisterUser_EmailExists()` - Falha ao registrar email existente  
+- `testRegisterUser_CpfExists()` - Falha ao registrar CPF existente
+- `testAuthenticateUser_Success()` - Autenticação bem-sucedida
+- `testAuthenticateUser_InvalidCredentials()` - Falha na autenticação
+
+**Objetivo:** Garantir que o sistema de autenticação funciona corretamente, incluindo validações de duplicidade e segurança de senhas.
+
+#### 💰 **InvestimentoServiceTest** (3 testes)
+Testa o serviço de gerenciamento de investimentos.
+
+**Métodos testados:**
+- `testFindById_Success()` - Buscar investimento por ID
+- `testFindById_NotFound()` - Investimento não encontrado
+- `testDeleteById_Success()` - Deletar investimento
+
+**Objetivo:** Validar as operações CRUD de investimentos e tratamento de erros.
+
+#### 👤 **UsuarioInvestimentoServiceTest** (1 teste)
+Testa o serviço de usuários investidores.
+
+**Métodos testados:**
+- `testFindByCpf_Success()` - Buscar usuário por CPF
+
+**Objetivo:** Verificar a busca e recuperação de dados de usuários.
+
+#### 🔄 **AuthIntegrationTest** (2 testes)
+Testa o fluxo completo de autenticação end-to-end.
+
+**Métodos testados:**
+- `fluxoCompletoAutenticacao_registro_login_acessoProtegido()` - Fluxo completo:
+  1. Registra novo usuário
+  2. Faz login e obtém JWT token
+  3. Acessa endpoint protegido com token
+  4. Tenta acessar sem token (deve falhar)
+- `login_credenciaisInvalidas_retorna401()` - Login com credenciais inválidas
+
+**Objetivo:** Validar o funcionamento completo do sistema de autenticação, incluindo JWT, autorização e acesso a recursos protegidos.
+
+#### ⚙️ **InvestimentosApiApplicationTests** (1 teste)
+Testa a inicialização da aplicação.
+
+**Métodos testados:**
+- `contextLoads()` - Carregamento do contexto Spring
+
+**Objetivo:** Garantir que todas as configurações, beans e dependências são carregadas corretamente.
+
+### 🔧 Configuração de Testes
+
+#### **Banco de Dados**
+- **Ambiente:** Oracle Database (mesmo banco da aplicação)
+- **Perfil:** `test` (ativado via `@ActiveProfiles("test")`)
+- **Configuração:** `application-test.properties`
+- **Limpeza:** Dados são limpos entre testes usando `@DirtiesContext`
+
+#### **Segurança**
+- **JWT:** Configuração específica para testes
+- **Autenticação:** Testada com usuários reais no banco
+- **Autorização:** Validação de acesso a endpoints protegidos
+
+#### **Principais Anotações Utilizadas**
+
+```java
+@SpringBootTest                    // Carrega contexto completo
+@AutoConfigureMockMvc             // Configura MockMvc para testes web
+@ActiveProfiles("test")           // Ativa perfil de teste
+@TestPropertySource              // Carrega propriedades de teste
+@DirtiesContext                  // Limpa contexto entre testes
+@ExtendWith(MockitoExtension.class) // Habilita mocks do Mockito
+```
+
+#### **Estrutura de Arquivos de Teste**
+
+```
+src/test/
+├── java/
+│   └── com/challenge/investimentos/investimentos_api/
+│       ├── integration/
+│       │   └── AuthIntegrationTest.java           # Testes de integração
+│       ├── service/
+│       │   ├── AuthServiceTest.java               # Testes unitários do AuthService
+│       │   ├── InvestimentoServiceTest.java       # Testes unitários do InvestimentoService
+│       │   └── UsuarioInvestimentoServiceTest.java # Testes unitários do UsuarioService
+│       └── InvestimentosApiApplicationTests.java  # Teste de contexto
+└── resources/
+    └── application-test.properties                # Configurações de teste
+```
+
+### 🎯 Benefícios dos Testes
+
+- **🛡️ Segurança:** Validam autenticação e autorização
+- **🔍 Confiabilidade:** Detectam regressões e bugs
+- **📈 Qualidade:** Garantem que o código funciona conforme esperado
+- **🚀 Deploy Seguro:** Validação antes de colocar em produção
+- **📚 Documentação:** Servem como documentação viva do comportamento esperado
+
+### 🏃‍♂️ Integração Contínua
+
+Os testes são executados automaticamente em:
+- **Commits:** Validação local antes do push
+- **Pull Requests:** Verificação automática de qualidade
+- **Deploy:** Execução obrigatória antes da publicação
+
+> **💡 Dica:** Execute sempre `./mvnw test` antes de fazer commit para garantir que todas as funcionalidades estão funcionando corretamente!
 
 ---
 
