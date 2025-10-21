@@ -215,65 +215,39 @@ Acesse a documentação interativa em:
 
 ### 🌐 Interface Web de Demonstração
 
-Desenvolvemos uma interface web simples para demonstrar o consumo da API de forma visual e interativa. Esta interface permite testar o fluxo completo da aplicação seguindo os passos básicos de uso.
+A seguir estão as telas principais do app web. Salve as imagens com os nomes sugeridos abaixo para manter o README atualizado e organizado.
 
-#### 📋 Passo 1: Tela Principal
-A interface apresenta uma tabela para visualizar investimentos e botões para as principais ações.
+#### 1️⃣ Tela de Cadastro/Login
 
-![Interface Web - Página Principal](./imagens/interface-web-principal.png)
+Mostra o formulário para o usuário ou admin realizar login ou cadastro.
 
-*Esta tela mostra a interface inicial onde podemos cadastrar usuários, criar investimentos e filtrar por CPF. Note os botões de ação disponíveis para gerenciar o sistema.*
+![Tela de Cadastro/Login](./imagens/tela-cadastro-login.png)
 
-#### 👤 Passo 2: Cadastro de Usuário
-O primeiro passo é cadastrar um usuário investidor. Clique em "Cadastrar Usuário" para abrir o formulário que solicita apenas o CPF do usuário.
+*Formulário simples para login ou cadastro. O usuário informa CPF e senha para acessar o sistema.*
 
-![Interface Web - Cadastro de Usuário](./imagens/interface-web-cadastro-usuario.png)
+#### 2️⃣ Painel do Admin (Listagem de Investimentos e Usuários)
 
-*Formulário simples para cadastro de usuário. O sistema valida o CPF e cria o usuário investidor no banco de dados através da API.*
+Visão geral do painel administrativo, exibindo a tabela de investimentos e a tabela de usuários, ambas acessíveis pelo admin em uma única tela.
 
-#### 💰 Passo 3: Cadastro de Investimentos
-Após ter um usuário cadastrado, podemos adicionar investimentos. O formulário permite inserir todos os dados do investimento incluindo banco, tipo, valores e rentabilidades.
+![Painel do Admin](./imagens/painel-admin.png)
 
-![Interface Web - Cadastro de Investimento](./imagens/interface-web-cadastro-investimento.png)
+*O admin visualiza todos os usuários e investimentos cadastrados, podendo navegar entre as abas, editar e apagar registros, e acessar funcionalidades exclusivas. Os botões de editar e apagar estão destacados nas tabelas.*
 
-*Formulário completo para cadastro de investimentos. Aqui definimos o banco, tipo de investimento, valores iniciais e podemos adicionar rentabilidades diárias.*
+#### 3️⃣ Listagem de Investimentos no Painel do Usuário
 
-#### 📊 Passo 4: Visualização dos Dados
-Com usuários e investimentos cadastrados, a tabela principal exibe todos os dados organizados. É possível filtrar por CPF específico ou visualizar todos os investimentos.
+Exibe apenas os investimentos do usuário logado, com destaque nos botões de editar e apagar.
 
-![Interface Web - Dados Carregados](./imagens/interface-web-dados.png)
+![Listagem de Investimentos Usuário](./imagens/listagem-investimentos-user.png)
 
-*Tabela populada com investimentos. Mostra como os dados são organizados e apresentados ao usuário final, facilitando a visualização e gestão dos investimentos.*
+*Tabela dos investimentos do usuário, com botões de editar e apagar destacados para facilitar a gestão.*
 
-### 📸 Interface Swagger - Documentação Técnica
+#### 4️⃣ Formulário de Novo Investimento
 
-A documentação da API é totalmente interativa através do Swagger UI, permitindo testar todos os endpoints diretamente pelo navegador. Esta é a ferramenta técnica para desenvolvedores testarem e integrarem com a API.
+Formulário utilizado tanto pelo admin quanto pelo usuário para cadastrar um novo investimento.
 
-#### 📖 Visão Geral da API
-A página principal do Swagger apresenta todos os controllers organizados por funcionalidade, mostrando a estrutura completa da API. Aqui você pode ver todos os endpoints disponíveis organizados por categoria.
+![Formulário de Novo Investimento](./imagens/form-novo-investimento.png)
 
-![Swagger UI - Página Principal](./imagens/swagger-pagina-principal.png)
-
-*Visão geral da API com todos os controllers disponíveis. Cada seção agrupa endpoints relacionados: Usuários Investidores, Investimentos, Bancos e Tipos de Investimento. Note a interface limpa e organizada do Swagger UI.*
-
-#### 👥 Endpoints de Usuários Investidores
-Ao expandir o controller de "Usuários Investidores", você pode ver todos os endpoints fundamentais para gerenciar usuários. Este controller é a base do sistema, onde você encontra operações de CRUD completo para usuários investidores.
-
-![Swagger UI - Endpoints de Usuários](./imagens/swagger-endpoints-usuarios.png)
-
-*Controller de Usuários Investidores expandido mostrando os endpoints disponíveis. Destaque para o endpoint GET /api/usuario-investimentos que lista todos os usuários cadastrados. Cada endpoint possui descrição clara de sua funcionalidade.*
-
-#### Funcionalidades do Swagger UI
-O Swagger oferece uma interface completa para testar a API:
-
-- **Documentação Interativa**: Cada endpoint possui descrição detalhada, parâmetros e exemplos
-- **Try it Out**: Botão para testar endpoints diretamente no navegador
-- **Schemas**: Visualização completa dos modelos de dados (DTOs)
-- **Responses**: Exemplos de respostas para cada código de status HTTP
-- **Authentication**: Suporte para diferentes tipos de autenticação quando necessário
-
-**💼 Para os demais controllers (Investimentos, Bancos, Tipos de Investimento):**
-Cada um segue o mesmo padrão de organização, com endpoints específicos para suas respectivas funcionalidades. O controller de Investimentos é o mais robusto, oferecendo operações completas de CRUD, enquanto Bancos e Tipos de Investimento são principalmente para consultas derivadas dos investimentos cadastrados.
+*Formulário completo para cadastro de novo investimento, incluindo campos para banco, tipo, valores e rentabilidades diárias.*
 
 ---
 
