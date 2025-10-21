@@ -3,7 +3,7 @@
 O objetivo do **Investaê** é ser seu assessor de investimentos completo, conectando todos os seus bancos e rentabilidades em um único lugar. Chega de ficar acessando vários apps!  
 Esta API faz parte do nosso app mobile, centralizando seus investimentos, orientando suas decisões e tornando tudo simples, visual e inteligente.
 
-Foi aí que decidimos criar o Investaê:  
+Foi aí que decidimos criar o Investaê
 Um app que centraliza seus investimentos, te orienta e torna tudo simples, visual e inteligente.
 
 ---
