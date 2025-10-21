@@ -28,6 +28,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class AuthIntegrationTest {
+        @Autowired
+        private com.challenge.investimentos.investimentos_api.repository.UsuarioRepository usuarioRepository;
+
+        @org.junit.jupiter.api.BeforeEach
+        void cleanDatabase() {
+                usuarioRepository.deleteAll();
+        }
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,22 +45,26 @@ class AuthIntegrationTest {
     @Test
     void fluxoCompletoAutenticacao_registro_login_acessoProtegido() throws Exception {
         // 1. Registrar usuário
-        AuthRequest registerRequest = new AuthRequest();
-        registerRequest.setUsername("testuser");
-        registerRequest.setPassword("testpass");
+        com.challenge.investimentos.investimentos_api.dto.RegisterRequest regReq = new com.challenge.investimentos.investimentos_api.dto.RegisterRequest();
+        regReq.setUsername("testuser");
+        regReq.setPassword("testpass");
+        regReq.setNome("Test User");
+        regReq.setEmail("test@example.com");
+        regReq.setCpf("12345678909");
+        regReq.setRole(com.challenge.investimentos.investimentos_api.enums.RoleEnum.USER);
 
-        mockMvc.perform(post("/auth/register")
+        mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(registerRequest)))
+                .content(objectMapper.writeValueAsString(regReq)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Usuário criado"));
+                .andExpect(content().string("Usuário criado com sucesso. Role: USER"));
 
         // 2. Fazer login e obter token
         AuthRequest loginRequest = new AuthRequest();
         loginRequest.setUsername("testuser");
         loginRequest.setPassword("testpass");
 
-        String loginResponse = mockMvc.perform(post("/auth/login")
+        String loginResponse = mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
@@ -71,18 +82,15 @@ class AuthIntegrationTest {
 
         // 4. Tentar acessar sem token (deve falhar)
         mockMvc.perform(get("/api/usuario-investimentos"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     @Test
     void login_credenciaisInvalidas_retorna401() throws Exception {
-        AuthRequest request = new AuthRequest();
-        request.setUsername("inexistente");
-        request.setPassword("senhaerrada");
-
-        mockMvc.perform(post("/auth/login")
+        String loginPayload = "{\"username\":\"inexistente\",\"password\":\"senhaerrada\"}";
+        mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(loginPayload))
                 .andExpect(status().isUnauthorized());
     }
 }
